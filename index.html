@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dashboards Tree</title>
 <style>
-  :root { --gap: 6px; --radius: 10px; --pad: 10px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  :root { --gap: 6px; --radius: 10px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
   body { margin: 20px; }
   header { display:flex; gap: var(--gap); align-items:center; margin-bottom: 10px; flex-wrap: wrap; }
   input[type="search"] { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); min-width: 280px; }
@@ -35,7 +35,7 @@
 <ul id="tree" class="tree" role="tree"></ul>
 
 <script>
-/*** DATA (from your message) ***/
+/*** DATA (all links included) ***/
 const data = [
   {
     id: "event-roi",
@@ -50,8 +50,16 @@ const data = [
             id: "event-roi-sept-by-event",
             title: "By Event",
             children: [
-              { id: "event-roi-sept-hsf", title: "Home Service Freedom" },
-              { id: "event-roi-sept-certain-path", title: "Certain path" }
+              {
+                id: "event-roi-sept-hsf",
+                title: "Home Service Freedom",
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392"
+              },
+              {
+                id: "event-roi-sept-certain-path",
+                title: "Certain path",
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704"
+              }
             ]
           }
         ]
@@ -73,7 +81,12 @@ const data = [
             id: "team-kpis-by-ae",
             title: "By AE",
             children: [
-              { id: "team-kpis-korth", title: "Korth" }
+              {
+                id: "team-kpis-korth",
+                title: "Korth",
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
+                // Note: query string retained; browsers will handle it. If you paste this into HTML elsewhere, ensure '&' is escaped.
+              }
             ]
           }
         ]
@@ -130,7 +143,7 @@ function render(nodes, parentEl) {
     row.appendChild(tog);
 
     const label = document.createElement(node.url ? "a" : "span");
-    if (node.url) { label.href = node.url; label.target = "_blank"; rel="noopener"; }
+    if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
     label.textContent = node.title || node.id;
     row.appendChild(label);
 
@@ -174,7 +187,6 @@ function filterTree(query) {
   query = query.trim().toLowerCase();
   treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hit"));
   if (!query) {
-    // reset visibility and respect saved state
     treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
     treeEl.querySelectorAll(".node").forEach(n => {
       const id = n.dataset.id;
