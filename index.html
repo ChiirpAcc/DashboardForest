@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboards Tree</title>
+<style>
+  :root { --gap: 6px; --radius: 10px; --pad: 10px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  body { margin: 20px; }
+  header { display:flex; gap: var(--gap); align-items:center; margin-bottom: 10px; flex-wrap: wrap; }
+  input[type="search"] { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); min-width: 280px; }
+  button { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); background: #f8f8f8; cursor: pointer; }
+  button:hover { background: #f0f0f0; }
+  .tree { list-style: none; padding-left: 0; }
+  .node { margin: 2px 0; }
+  .row { display:flex; align-items:center; gap: 6px; padding: 4px; border-radius: 8px; }
+  .row:hover { background: #f7f7f7; }
+  .toggle { width: 1.4em; height: 1.4em; display: inline-grid; place-items:center; font-weight: 700; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
+  .toggle.leaf { visibility: hidden; }
+  .children { margin-left: 20px; padding-left: 10px; border-left: 1px dashed #ddd; }
+  .hidden { display: none !important; }
+  a { text-decoration: none; }
+  .muted { color: #666; font-size: 12px; }
+  .hit a { outline: 2px solid rgba(0,0,0,.1); border-radius: 6px; padding: 2px 4px; }
+</style>
+</head>
+<body>
+<header>
+  <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
+  <button id="expand" type="button">Expand all</button>
+  <button id="collapse" type="button">Collapse all</button>
+  <span class="muted" id="count" aria-live="polite"></span>
+</header>
+
+<ul id="tree" class="tree" role="tree"></ul>
+
+<script>
+/*** DATA (from your message) ***/
+const data = [
+  {
+    id: "event-roi",
+    title: "Event ROI dashboards",
+    children: [
+      {
+        id: "event-roi-sept",
+        title: "September dashboard",
+        url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137085472",
+        children: [
+          {
+            id: "event-roi-sept-by-event",
+            title: "By Event",
+            children: [
+              { id: "event-roi-sept-hsf", title: "Home Service Freedom" },
+              { id: "event-roi-sept-certain-path", title: "Certain path" }
+            ]
+          }
+        ]
+      },
+      { id: "event-roi-oct", title: "October" },
+      { id: "event-roi-nov", title: "November" }
+    ]
+  },
+  {
+    id: "team-kpis",
+    title: "Team KPI's",
+    children: [
+      {
+        id: "team-kpis-ae-kpis",
+        title: "AE KPI's",
+        url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137141592",
+        children: [
+          {
+            id: "team-kpis-by-ae",
+            title: "By AE",
+            children: [
+              { id: "team-kpis-korth", title: "Korth" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "sdr",
+    title: "SDR",
+    children: [
+      { id: "sdr-yearly",  title: "Yearly",  url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/136882917" },
+      { id: "sdr-monthly", title: "Monthly", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/136888045" },
+      { id: "sdr-daily",   title: "Daily",   url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/136880234" }
+    ]
+  },
+  {
+    id: "cancellations",
+    title: "Cancelations",
+    children: [
+      { id: "cancellations-overview", title: "Overview", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/16011189" }
+    ]
+  }
+];
+
+/*** CORE TREE (vanilla JS) ***/
+const treeEl = document.getElementById("tree");
+const qEl = document.getElementById("q");
+const countEl = document.getElementById("count");
+const OPEN_KEY = "dash_tree_open_ids_v1";
+
+let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
+function saveOpen() { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); }
+function isLeaf(node) { return !node.children || node.children.length === 0; }
+
+function render(nodes, parentEl) {
+  parentEl.innerHTML = "";
+  let totalLeaves = 0;
+  for (const node of nodes) {
+    const li = document.createElement("li");
+    li.className = "node";
+    li.dataset.id = node.id;
+    li.setAttribute("role", "treeitem");
+    li.setAttribute("aria-expanded", openSet.has(node.id));
+
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const tog = document.createElement("button");
+    tog.className = "toggle" + (isLeaf(node) ? " leaf" : "");
+    tog.setAttribute("type", "button");
+    tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
+    tog.textContent = openSet.has(node.id) ? "▾" : "▸";
+    tog.addEventListener("click", () => toggleNode(node.id, li));
+    row.appendChild(tog);
+
+    const label = document.createElement(node.url ? "a" : "span");
+    if (node.url) { label.href = node.url; label.target = "_blank"; rel="noopener"; }
+    label.textContent = node.title || node.id;
+    row.appendChild(label);
+
+    li.appendChild(row);
+    parentEl.appendChild(li);
+
+    if (!isLeaf(node)) {
+      const children = document.createElement("ul");
+      children.className = "children" + (openSet.has(node.id) ? "" : " hidden");
+      children.setAttribute("role", "group");
+      li.appendChild(children);
+      totalLeaves += render(node.children, children);
+    } else {
+      totalLeaves += 1;
+    }
+  }
+  return totalLeaves;
+}
+
+function toggleNode(id, liEl) {
+  if (!liEl.querySelector(":scope > .children")) return;
+  const isOpen = openSet.has(id);
+  const children = liEl.querySelector(":scope > .children");
+  const btn = liEl.querySelector(":scope > .row .toggle");
+  if (isOpen) openSet.delete(id); else openSet.add(id);
+  saveOpen();
+  btn.textContent = isOpen ? "▸" : "▾";
+  children.classList.toggle("hidden", isOpen);
+  liEl.setAttribute("aria-expanded", !isOpen);
+}
+
+function flatten(nodes, arr=[]) {
+  for (const n of nodes) {
+    arr.push(n);
+    if (n.children) flatten(n.children, arr);
+  }
+  return arr;
+}
+
+function filterTree(query) {
+  query = query.trim().toLowerCase();
+  treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hit"));
+  if (!query) {
+    // reset visibility and respect saved state
+    treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
+    treeEl.querySelectorAll(".node").forEach(n => {
+      const id = n.dataset.id;
+      const children = n.querySelector(":scope > .children");
+      const tog = n.querySelector(":scope > .row .toggle");
+      if (children && tog) {
+        const open = openSet.has(id);
+        children.classList.toggle("hidden", !open);
+        tog.textContent = open ? "▾" : "▸";
+        n.setAttribute("aria-expanded", open);
+      }
+    });
+    return;
+  }
+
+  const all = flatten(data);
+  const hits = new Set(
+    all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id)
+  );
+
+  function markVisibility(node) {
+    const selfHit = hits.has(node.id);
+    let childVisible = false;
+    (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
+    const visible = selfHit || childVisible;
+    const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
+    if (el) {
+      el.classList.toggle("hidden", !visible);
+      if (visible) el.classList.add("hit");
+      const children = el.querySelector(":scope > .children");
+      const tog = el.querySelector(":scope > .row .toggle");
+      if (children && tog) {
+        children.classList.toggle("hidden", !childVisible);
+        tog.textContent = childVisible ? "▾" : "▸";
+        el.setAttribute("aria-expanded", childVisible);
+      }
+    }
+    return visible;
+  }
+  data.forEach(root => markVisibility(root));
+}
+
+/*** INIT + CONTROLS ***/
+const leaves = render(data, treeEl);
+countEl.textContent = `Dashboards: ${leaves}`;
+
+document.getElementById("expand").addEventListener("click", () => {
+  const ids = flatten(data).filter(n => !isLeaf(n)).map(n => n.id);
+  openSet = new Set(ids); saveOpen();
+  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.remove("hidden"));
+  treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▾");
+  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", true));
+});
+
+document.getElementById("collapse").addEventListener("click", () => {
+  openSet = new Set(); saveOpen();
+  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.add("hidden"));
+  treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▸");
+  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", false));
+});
+
+qEl.addEventListener("input", () => filterTree(qEl.value));
+
+/*** Optional deep-links: ?q=west&open=event-roi/sdr ***/
+const params = new URLSearchParams(location.search);
+if (params.get("open")) { params.get("open").split("/").forEach(id => openSet.add(id)); saveOpen(); }
+if (params.get("q")) { qEl.value = params.get("q"); }
+filterTree(qEl.value || "");
+</script>
+</body>
+</html>
