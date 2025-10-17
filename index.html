@@ -3,39 +3,170 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dashboards Tree</title>
+<title>Dashboard Forest • CHIIRP</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%2300a87e'/%3E%3Cpath d='M50 20 L70 55 H30 Z' fill='white'/%3E%3C/svg%3E">
 <style>
-  :root { --gap: 6px; --radius: 10px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-  body { margin: 20px; }
-  header { display:flex; gap: var(--gap); align-items:center; margin-bottom: 10px; flex-wrap: wrap; }
-  input[type="search"] { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); min-width: 280px; }
-  button { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); background: #f8f8f8; cursor: pointer; }
-  button:hover { background: #f0f0f0; }
-  .tree { list-style: none; padding-left: 0; }
-  .node { margin: 2px 0; }
-  .row { display:flex; align-items:center; gap: 6px; padding: 4px; border-radius: 8px; }
-  .row:hover { background: #f7f7f7; }
-  .toggle { width: 1.4em; height: 1.4em; display: inline-grid; place-items:center; font-weight: 700; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
-  .toggle.leaf { visibility: hidden; }
-  .children { margin-left: 20px; padding-left: 10px; border-left: 1px dashed #ddd; }
-  .hidden { display: none !important; }
-  a { text-decoration: none; }
-  .muted { color: #666; font-size: 12px; }
-  .hit a { outline: 2px solid rgba(0,0,0,.1); border-radius: 6px; padding: 2px 4px; }
+  /* ---------- Theme ---------- */
+  :root{
+    --bg: #f7f8fa;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #5b6475;
+    --line: #e5e7eb;
+    --accent: #00a87e;
+    --accent-weak: #19c49b15;
+    --shadow: 0 6px 24px rgba(15,23,42,.06), 0 2px 8px rgba(15,23,42,.04);
+    --radius: 14px;
+    --radius-sm: 10px;
+    --ring: 0 0 0 3px rgba(0,168,126,.25);
+    --trans: 170ms cubic-bezier(.2,.8,.2,1);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #0b1020;
+      --card: #11172a;
+      --text: #e6e8ee;
+      --muted: #9aa3b2;
+      --line: #22304a;
+      --accent: #19c49b;
+      --accent-weak: #19c49b22;
+      --shadow: 0 8px 24px rgba(0,0,0,.35);
+      --ring: 0 0 0 3px rgba(25,196,155,.35);
+    }
+  }
+
+  /* ---------- Layout ---------- */
+  html,body{height:100%}
+  body{
+    margin:0; background: var(--bg); color: var(--text);
+    font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  .container{max-width: 1100px; margin: 28px auto; padding: 0 16px;}
+  .header{
+    background: linear-gradient(135deg, var(--accent-weak), transparent 60%);
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; display:flex; align-items:center; justify-content:space-between; gap: 12px;
+    box-shadow: var(--shadow);
+  }
+  .title{display:flex; gap:12px; align-items:center}
+  .logo{
+    width:38px;height:38px;border-radius:12px;background:var(--accent);
+    display:grid;place-items:center; color:#fff; font-weight:800;
+    box-shadow: 0 6px 18px rgba(0,168,126,.35);
+  }
+  .title h1{font-size:18px; margin:0}
+  .title p{margin:0; color:var(--muted); font-size:13px}
+  .controls{display:flex; gap:8px; flex-wrap:wrap}
+  .control{
+    padding:8px 12px; border-radius:10px; border:1px solid var(--line);
+    background: var(--card); cursor:pointer; transition: background var(--trans), transform var(--trans);
+  }
+  .control:hover{ transform: translateY(-1px) }
+  .control:focus-visible{ outline: none; box-shadow: var(--ring); }
+  .search{
+    display:flex; align-items:center; gap:8px; background: var(--card);
+    border:1px solid var(--line); border-radius: 10px; padding: 6px 10px; min-width: 260px;
+  }
+  .search input{ border:none; outline:none; background:transparent; width:220px; color: var(--text) }
+  .search .clear{ background:transparent; border:none; cursor:pointer; color: var(--muted) }
+
+  /* ---------- Cards / Sections ---------- */
+  .sections{ margin-top: 18px; display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 900px){ .sections{ grid-template-columns: 1fr 1fr; } }
+  .card{
+    background: var(--card); border:1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+    transition: box-shadow var(--trans), transform var(--trans);
+  }
+  .card:hover{ transform: translateY(-2px); }
+  .card-head{ display:flex; align-items:center; justify-content:space-between; padding: 14px 16px; }
+  .card-head h2{ margin:0; font-size:16px; display:flex; align-items:center; gap:10px }
+  .badge{ font-size:12px; color: var(--muted); padding:4px 8px; border:1px solid var(--line); border-radius: 999px; background: var(--accent-weak) }
+  .card-body{ padding: 6px 2px 12px 10px; }
+
+  /* ---------- Tree ---------- */
+  .tree{ list-style:none; padding-left: 12px; margin:0; }
+  .node{ margin: 2px 0; position: relative; }
+  .node:before{
+    content:""; position:absolute; left: 13px; top: 22px; bottom: -6px; width: 1px; background: var(--line);
+  }
+  .node:last-child:before{ display:none }
+  .row{
+    display:flex; align-items:center; gap:10px; padding:8px 10px; margin-left:8px; margin-right:8px;
+    border-radius: var(--radius-sm); transition: background var(--trans);
+  }
+  .row:hover{ background: var(--accent-weak); }
+  .toggle{
+    width: 22px; height: 22px; display:grid; place-items:center;
+    border:1px solid var(--line); border-radius:8px; background: var(--card); cursor:pointer;
+    transition: transform var(--trans), background var(--trans);
+  }
+  .toggle svg{ width: 14px; height: 14px }
+  .toggle.leaf{ visibility: hidden }
+  .children{
+    margin-left: 28px; padding-left: 10px; border-left: 1px dashed var(--line);
+    overflow: clip;
+  }
+  .hidden{ display:none !important }
+  .link{
+    text-decoration:none; color: var(--text); font-weight: 600;
+  }
+  .link:hover{ text-decoration: underline }
+  .meta{ color: var(--muted); font-size: 12px; }
+  .actions{ display:flex; gap:6px; margin-left:auto }
+  .iconbtn{
+    display:grid; place-items:center; width:26px; height:26px; border:1px solid var(--line);
+    border-radius:8px; background: var(--card); cursor:pointer; transition: transform var(--trans), background var(--trans);
+  }
+  .iconbtn:hover{ transform: translateY(-1px); }
+  .iconbtn:focus-visible{ outline:none; box-shadow: var(--ring); }
+  .hit .row{ background: var(--accent-weak); }
+  .count{ color: var(--muted); font-size: 12px; }
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: 20px; background: var(--text); color: var(--card);
+    padding: 10px 14px; border-radius: 10px; opacity:0; pointer-events:none;
+    transition: opacity var(--trans), transform var(--trans);
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(-4px) }
+
+  /* ---------- Motion ---------- */
+  .fade-slide{ animation: fadeSlide .35s ease both }
+  @keyframes fadeSlide{
+    from{ opacity:0; transform: translateY(4px) } to{ opacity:1; transform: none }
+  }
 </style>
 </head>
 <body>
-<header>
-  <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
-  <button id="expand" type="button">Expand all</button>
-  <button id="collapse" type="button">Collapse all</button>
-  <span class="muted" id="count" aria-live="polite"></span>
-</header>
+  <div class="container">
+    <div class="header fade-slide" role="region" aria-label="Header">
+      <div class="title">
+        <div class="logo" aria-hidden="true">DF</div>
+        <div>
+          <h1>Dashboard Forest</h1>
+          <p>Curated HubSpot dashboards — fast access for leadership</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="search" role="search">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a6 6 0 1 1 3.89 10.62l4.25 4.26l-1.41 1.41l-4.26-4.25A6 6 0 0 1 10 4m0 2a4 4 0 1 0 0 8a4 4 0 0 0 0-8"/></svg>
+          <input id="q" type="search" placeholder="Search (press /)" aria-label="Filter dashboards" />
+          <button class="clear" id="clearSearch" title="Clear" aria-label="Clear search">×</button>
+        </div>
+        <button class="control" id="expand" type="button" title="Expand all (x)">Expand all</button>
+        <button class="control" id="collapse" type="button" title="Collapse all (c)">Collapse all</button>
+        <button class="control" id="reset" type="button" title="Reset open/closed memory">Reset state</button>
+      </div>
+    </div>
 
-<ul id="tree" class="tree" role="tree"></ul>
+    <div class="sections" id="sections" aria-live="polite"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite">Copied</div>
+  </div>
 
 <script>
-/*** DATA (all links included) ***/
+/* ===================== Data ===================== */
 const data = [
   {
     id: "event-roi",
@@ -50,16 +181,8 @@ const data = [
             id: "event-roi-sept-by-event",
             title: "By Event",
             children: [
-              {
-                id: "event-roi-sept-hsf",
-                title: "Home Service Freedom",
-                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392"
-              },
-              {
-                id: "event-roi-sept-certain-path",
-                title: "Certain path",
-                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704"
-              }
+              { id: "event-roi-sept-hsf", title: "Home Service Freedom", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392" },
+              { id: "event-roi-sept-certain-path", title: "Certain path", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704" }
             ]
           }
         ]
@@ -81,12 +204,9 @@ const data = [
             id: "team-kpis-by-ae",
             title: "By AE",
             children: [
-              {
-                id: "team-kpis-korth",
+              { id: "team-kpis-korth",
                 title: "Korth",
-                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
-                // Note: query string retained; browsers will handle it. If you paste this into HTML elsewhere, ensure '&' is escaped.
-              }
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE" }
             ]
           }
         ]
@@ -111,150 +231,213 @@ const data = [
   }
 ];
 
-/*** CORE TREE (vanilla JS) ***/
-const treeEl = document.getElementById("tree");
-const qEl = document.getElementById("q");
-const countEl = document.getElementById("count");
-const OPEN_KEY = "dash_tree_open_ids_v1";
-
+/* ===================== Utilities ===================== */
+const qs = (s,el=document)=>el.querySelector(s);
+const qsa = (s,el=document)=>[...el.querySelectorAll(s)];
+const OPEN_KEY = "df_open_set_v1";
 let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
-function saveOpen() { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); }
-function isLeaf(node) { return !node.children || node.children.length === 0; }
+const saveOpen = ()=>localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet]));
+const isLeaf = n => !n.children || n.children.length===0;
+const flatten=(nodes,arr=[])=>{ for(const n of nodes){arr.push(n); if(n.children) flatten(n.children,arr);} return arr; };
+const toast = (msg)=>{
+  const el = qs('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1300);
+};
 
-function render(nodes, parentEl) {
-  parentEl.innerHTML = "";
-  let totalLeaves = 0;
-  for (const node of nodes) {
-    const li = document.createElement("li");
-    li.className = "node";
+/* ===================== Rendering ===================== */
+const sectionsEl = qs('#sections');
+
+function sectionCard(section){
+  const card = document.createElement('section');
+  card.className = 'card fade-slide';
+  card.innerHTML = `
+    <div class="card-head">
+      <h2><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10 4H4v6h6zm10 0h-6v6h6zM10 14H4v6h6zm10 0h-6v6h6z"/></svg>${section.title}</h2>
+      <span class="badge" id="badge-${section.id}">0 items</span>
+    </div>
+    <div class="card-body"><ul class="tree" role="tree" id="tree-${section.id}"></ul></div>
+  `;
+  renderTree([section], qs(`#tree-${section.id}`, card));
+  return card;
+}
+
+function renderTree(nodes, parentEl){
+  parentEl.innerHTML = '';
+  let leaves = 0;
+
+  for(const node of nodes){
+    if(node === nodes[0] && parentEl.id?.startsWith('tree-') && node.children){
+      // skip rendering the synthetic root row in section cards
+      for(const ch of node.children){ leaves += renderTree([ch], parentEl); }
+      qs(`#badge-${node.id}`)?.replaceChildren(`${leaves} item${leaves!==1?'s':''}`);
+      return leaves;
+    }
+
+    const li = document.createElement('li');
+    li.className = 'node';
     li.dataset.id = node.id;
-    li.setAttribute("role", "treeitem");
-    li.setAttribute("aria-expanded", openSet.has(node.id));
+    li.setAttribute('role','treeitem');
+    li.setAttribute('aria-expanded', openSet.has(node.id));
 
-    const row = document.createElement("div");
-    row.className = "row";
+    const row = document.createElement('div');
+    row.className = 'row';
 
-    const tog = document.createElement("button");
-    tog.className = "toggle" + (isLeaf(node) ? " leaf" : "");
-    tog.setAttribute("type", "button");
-    tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
-    tog.textContent = openSet.has(node.id) ? "▾" : "▸";
-    tog.addEventListener("click", () => toggleNode(node.id, li));
+    const tog = document.createElement('button');
+    tog.className = 'toggle' + (isLeaf(node)?' leaf':'');
+    tog.setAttribute('type','button');
+    tog.setAttribute('aria-label', isLeaf(node)?'leaf':'toggle');
+    tog.innerHTML = `<svg viewBox="0 0 24 24"><path fill="currentColor" d="${openSet.has(node.id)?'M7 10l5 5 5-5z':'M9 6l6 6-6 6'}"/></svg>`;
+    tog.addEventListener('click', ()=>toggleNode(node.id, li));
     row.appendChild(tog);
 
-    const label = document.createElement(node.url ? "a" : "span");
-    if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
+    const label = document.createElement(node.url ? 'a' : 'span');
+    if(node.url){ label.href = node.url; label.target = '_blank'; label.rel = 'noopener noreferrer'; label.className='link'; }
     label.textContent = node.title || node.id;
     row.appendChild(label);
+
+    // right-side actions for links
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    if(node.url){
+      const openIcon = document.createElement('a');
+      openIcon.href = node.url; openIcon.target='_blank'; openIcon.rel='noopener noreferrer';
+      openIcon.className='iconbtn'; openIcon.title='Open in new tab';
+      openIcon.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M14 3h7v7h-2V6.41l-9.29 9.3l-1.42-1.42l9.3-9.29H14zM5 5h6v2H7v10h10v-4h2v6H5z"/></svg>`;
+      actions.appendChild(openIcon);
+
+      const copyBtn = document.createElement('button');
+      copyBtn.className='iconbtn'; copyBtn.title='Copy link';
+      copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12zM20 5H8a2 2 0 0 0-2 2v14h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m0 16H8V7h12z"/></svg>`;
+      copyBtn.addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText(node.url); toast('Link copied'); }
+        catch{ toast('Copy failed'); }
+      });
+      actions.appendChild(copyBtn);
+    }
+    row.appendChild(actions);
 
     li.appendChild(row);
     parentEl.appendChild(li);
 
-    if (!isLeaf(node)) {
-      const children = document.createElement("ul");
-      children.className = "children" + (openSet.has(node.id) ? "" : " hidden");
-      children.setAttribute("role", "group");
+    if(!isLeaf(node)){
+      const children = document.createElement('ul');
+      children.className = 'children' + (openSet.has(node.id)?'':' hidden');
+      children.setAttribute('role','group');
       li.appendChild(children);
-      totalLeaves += render(node.children, children);
-    } else {
-      totalLeaves += 1;
+      leaves += renderTree(node.children, children);
+    }else{
+      leaves += 1;
     }
   }
-  return totalLeaves;
+  return leaves;
 }
 
-function toggleNode(id, liEl) {
-  if (!liEl.querySelector(":scope > .children")) return;
-  const isOpen = openSet.has(id);
-  const children = liEl.querySelector(":scope > .children");
-  const btn = liEl.querySelector(":scope > .row .toggle");
-  if (isOpen) openSet.delete(id); else openSet.add(id);
+function toggleNode(id, liEl){
+  const children = liEl.querySelector(':scope > .children');
+  if(!children) return;
+  const open = openSet.has(id);
+  const btn = liEl.querySelector(':scope > .row .toggle');
+  if(open) openSet.delete(id); else openSet.add(id);
   saveOpen();
-  btn.textContent = isOpen ? "▸" : "▾";
-  children.classList.toggle("hidden", isOpen);
-  liEl.setAttribute("aria-expanded", !isOpen);
+  btn.innerHTML = `<svg viewBox="0 0 24 24"><path fill="currentColor" d="${open?'M9 6l6 6-6 6':'M7 10l5 5 5-5z'}"/></svg>`;
+  children.classList.toggle('hidden', open);
+  liEl.setAttribute('aria-expanded', !open);
 }
 
-function flatten(nodes, arr=[]) {
-  for (const n of nodes) {
-    arr.push(n);
-    if (n.children) flatten(n.children, arr);
-  }
-  return arr;
+/* ===================== Controls & Init ===================== */
+function renderAll(){
+  sectionsEl.innerHTML = '';
+  for(const top of data){ sectionsEl.appendChild(sectionCard(top)); }
 }
+renderAll();
 
-function filterTree(query) {
+// Search
+const qEl = qs('#q'), clearBtn = qs('#clearSearch');
+const treeEls = ()=>qsa('.tree');
+
+function filterTree(query){
   query = query.trim().toLowerCase();
-  treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hit"));
-  if (!query) {
-    treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
-    treeEl.querySelectorAll(".node").forEach(n => {
+  qsa('.node').forEach(n=>n.classList.remove('hit','hidden'));
+
+  if(!query){
+    // restore per saved state
+    qsa('.node').forEach(n=>{
       const id = n.dataset.id;
-      const children = n.querySelector(":scope > .children");
-      const tog = n.querySelector(":scope > .row .toggle");
-      if (children && tog) {
+      const children = n.querySelector(':scope > .children');
+      const btn = n.querySelector(':scope > .row .toggle');
+      if(children && btn){
         const open = openSet.has(id);
-        children.classList.toggle("hidden", !open);
-        tog.textContent = open ? "▾" : "▸";
-        n.setAttribute("aria-expanded", open);
+        children.classList.toggle('hidden', !open);
+        btn.innerHTML = `<svg viewBox="0 0 24 24"><path fill="currentColor" d="${open?'M7 10l5 5 5-5z':'M9 6l6 6-6 6'}"/></svg>`;
+        n.setAttribute('aria-expanded', open);
       }
     });
     return;
   }
 
   const all = flatten(data);
-  const hits = new Set(
-    all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id)
-  );
+  const hits = new Set(all.filter(n => (n.title||n.id).toLowerCase().includes(query)).map(n=>n.id));
 
-  function markVisibility(node) {
-    const selfHit = hits.has(node.id);
-    let childVisible = false;
-    (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
-    const visible = selfHit || childVisible;
-    const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
-    if (el) {
-      el.classList.toggle("hidden", !visible);
-      if (visible) el.classList.add("hit");
-      const children = el.querySelector(":scope > .children");
-      const tog = el.querySelector(":scope > .row .toggle");
-      if (children && tog) {
-        children.classList.toggle("hidden", !childVisible);
-        tog.textContent = childVisible ? "▾" : "▸";
-        el.setAttribute("aria-expanded", childVisible);
+  function mark(node){
+    const self = hits.has(node.id);
+    let childVis = false;
+    (node.children||[]).forEach(ch => { if(mark(ch)) childVis = true; });
+    const visible = self || childVis;
+    const el = qs(`.node[data-id="${CSS.escape(node.id)}"]`);
+    if(el){
+      el.classList.toggle('hidden', !visible);
+      if(visible) el.classList.add('hit');
+      const children = el.querySelector(':scope > .children');
+      const btn = el.querySelector(':scope > .row .toggle');
+      if(children && btn){
+        children.classList.toggle('hidden', !childVis);
+        btn.innerHTML = `<svg viewBox="0 0 24 24"><path fill="currentColor" d="${childVis?'M7 10l5 5 5-5z':'M9 6l6 6-6 6'}"/></svg>`;
+        el.setAttribute('aria-expanded', childVis);
       }
     }
     return visible;
   }
-  data.forEach(root => markVisibility(root));
+  data.forEach(root=>mark(root));
 }
 
-/*** INIT + CONTROLS ***/
-const leaves = render(data, treeEl);
-countEl.textContent = `Dashboards: ${leaves}`;
+qEl.addEventListener('input', ()=>filterTree(qEl.value));
+clearBtn.addEventListener('click', ()=>{ qEl.value=''; filterTree(''); qEl.focus(); });
 
-document.getElementById("expand").addEventListener("click", () => {
-  const ids = flatten(data).filter(n => !isLeaf(n)).map(n => n.id);
+// Buttons
+qs('#expand').addEventListener('click', ()=>{
+  const ids = flatten(data).filter(n=>!isLeaf(n)).map(n=>n.id);
   openSet = new Set(ids); saveOpen();
-  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.remove("hidden"));
-  treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▾");
-  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", true));
+  qsa('.children').forEach(ul=>ul.classList.remove('hidden'));
+  qsa('.node').forEach(n=>n.setAttribute('aria-expanded', true));
+  qsa('.row .toggle:not(.leaf)').forEach(b=>b.innerHTML=`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>`);
 });
-
-document.getElementById("collapse").addEventListener("click", () => {
+qs('#collapse').addEventListener('click', ()=>{
   openSet = new Set(); saveOpen();
-  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.add("hidden"));
-  treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▸");
-  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", false));
+  qsa('.children').forEach(ul=>ul.classList.add('hidden'));
+  qsa('.node').forEach(n=>n.setAttribute('aria-expanded', false));
+  qsa('.row .toggle:not(.leaf)').forEach(b=>b.innerHTML=`<svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg>`);
+});
+qs('#reset').addEventListener('click', ()=>{
+  localStorage.removeItem(OPEN_KEY);
+  openSet = new Set();
+  filterTree(qEl.value || '');
+  toast('State reset');
 });
 
-qEl.addEventListener("input", () => filterTree(qEl.value));
+// Keyboard shortcuts
+window.addEventListener('keydown', (e)=>{
+  if(e.key === '/' && document.activeElement !== qEl){ e.preventDefault(); qEl.focus(); }
+  if(e.key.toLowerCase() === 'x'){ qs('#expand').click(); }
+  if(e.key.toLowerCase() === 'c'){ qs('#collapse').click(); }
+});
 
-/*** Optional deep-links: ?q=west&open=event-roi/sdr ***/
+// Deep links
 const params = new URLSearchParams(location.search);
-if (params.get("open")) { params.get("open").split("/").forEach(id => openSet.add(id)); saveOpen(); }
-if (params.get("q")) { qEl.value = params.get("q"); }
-filterTree(qEl.value || "");
+if(params.get('open')){ params.get('open').split('/').forEach(id=>openSet.add(id)); saveOpen(); }
+if(params.get('q')){ qEl.value = params.get('q'); }
+filterTree(qEl.value || '');
 </script>
 </body>
 </html>
