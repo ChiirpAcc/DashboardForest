@@ -3,140 +3,39 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dashboard Forest</title>
+<title>Dashboards Tree</title>
 <style>
-  :root{
-    --bg: #f6f7fb;
-    --card: #ffffff;
-    --text: #1f2937;
-    --muted: #6b7280;
-    --ring: #3b82f6;
-    --line: #e5e7eb;
-    --chip: #eef2ff;
-    --chip-text: #4f46e5;
-    --radius: 14px;
-    --shadow: 0 8px 24px rgba(0,0,0,.08);
-  }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#0f1116; --card:#141824; --text:#e5e7eb; --muted:#9ca3af;
-      --ring:#60a5fa; --line:#232838; --chip:#1f2540; --chip-text:#a5b4fc;
-      --shadow: 0 8px 24px rgba(0,0,0,.35);
-    }
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    background: radial-gradient(1200px 600px at 10% -10%, rgba(99,102,241,.12), transparent 60%),
-                radial-gradient(1000px 500px at 90% 0%, rgba(59,130,246,.12), transparent 60%),
-                var(--bg);
-    color:var(--text);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-    padding:32px 20px 40px;
-  }
-  .wrap{
-    max-width: 980px;
-    margin: 0 auto;
-  }
-  .card{
-    background:var(--card);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    border:1px solid var(--line);
-    overflow:hidden;
-  }
-  header.top{
-    display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-    padding:18px 18px 14px 18px;
-    border-bottom:1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.08), transparent),
-      var(--card);
-  }
-  .title{
-    font-weight:700; letter-spacing:.2px; margin-right:auto;
-  }
-  .toolbar{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-  input[type="search"]{
-    padding:10px 12px; border-radius:12px; border:1px solid var(--line); min-width:260px;
-    background:transparent; color:var(--text);
-    outline:none; transition: box-shadow .15s ease, border-color .15s ease;
-  }
-  input[type="search"]:focus{ box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 30%, transparent); border-color:var(--ring); }
-  .btn{
-    padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:transparent;
-    color:var(--text); cursor:pointer; transition: background .15s ease, transform .02s ease;
-  }
-  .btn:hover{ background: color-mix(in oklab, var(--line) 30%, transparent); }
-  .btn:active{ transform: translateY(1px); }
-  .muted{ color:var(--muted); font-size:13px; }
-  .chip{ background:var(--chip); color:var(--chip-text); border-radius:999px; padding:4px 8px; font-size:12px; }
-
-  /* Tree */
-  .tree{ list-style:none; margin:0; padding: 12px 8px 16px 8px; }
-  .node{ margin:2px 0; }
-  .row{
-    display:grid; grid-template-columns: 28px 20px 1fr auto; align-items:center;
-    gap:8px; padding:6px 12px; border-radius:10px;
-    transition: background .12s ease;
-  }
-  .row:hover{ background: color-mix(in oklab, var(--line) 18%, transparent);}
-  .toggle{
-    appearance:none; border:1px solid var(--line); width:28px; height:28px; border-radius:8px;
-    display:grid; place-items:center; background:transparent; cursor:pointer;
-    transition: border-color .15s ease, background .15s ease;
-  }
-  .toggle:hover{ border-color:var(--ring); background: color-mix(in oklab, var(--ring) 12%, transparent);}
-  .toggle svg{ transition: transform .15s ease; }
-  .toggle[aria-expanded="true"] svg{ transform: rotate(90deg); }
-  .toggle.leaf{ visibility:hidden; }
-
-  .icon{ width:18px; height:18px; opacity:.9 }
-  .titlelink{
-    color:inherit; text-decoration:none; font-weight:500;
-    outline:none; border-radius:8px; padding:3px 4px;
-  }
-  .titlelink:focus{ box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 30%, transparent); }
-
-  .children{
-    margin-left: 36px; padding-left: 14px; border-left:1px dashed var(--line);
-    transform-origin: top left;
-    transition: opacity .16s ease, transform .16s ease;
-  }
-  .children.hidden{ display:none !important; }
-  .hit .titlelink{ box-shadow:0 0 0 2px color-mix(in oklab, var(--ring) 20%, transparent); }
-
-  .footer{
-    padding: 10px 16px 16px 16px; display:flex; justify-content:space-between; align-items:center;
-    border-top:1px solid var(--line);
-  }
+  :root { --gap: 6px; --radius: 10px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  body { margin: 20px; }
+  header { display:flex; gap: var(--gap); align-items:center; margin-bottom: 10px; flex-wrap: wrap; }
+  input[type="search"] { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); min-width: 280px; }
+  button { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); background: #f8f8f8; cursor: pointer; }
+  button:hover { background: #f0f0f0; }
+  .tree { list-style: none; padding-left: 0; }
+  .node { margin: 2px 0; }
+  .row { display:flex; align-items:center; gap: 6px; padding: 4px; border-radius: 8px; }
+  .row:hover { background: #f7f7f7; }
+  .toggle { width: 1.4em; height: 1.4em; display: inline-grid; place-items:center; font-weight: 700; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
+  .toggle.leaf { visibility: hidden; }
+  .children { margin-left: 20px; padding-left: 10px; border-left: 1px dashed #ddd; }
+  .hidden { display: none !important; }
+  a { text-decoration: none; }
+  .muted { color: #666; font-size: 12px; }
+  .hit a { outline: 2px solid rgba(0,0,0,.1); border-radius: 6px; padding: 2px 4px; }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header class="top">
-        <div class="title">Dashboard Forest</div>
-        <div class="toolbar">
-          <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
-          <button id="clear" class="btn" type="button" title="Clear filter">Clear</button>
-          <span class="chip" id="count" aria-live="polite">Dashboards: 0</span>
-          <button id="expand" class="btn" type="button">Expand all</button>
-          <button id="collapse" class="btn" type="button">Collapse all</button>
-        </div>
-      </header>
+<header>
+  <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
+  <button id="expand" type="button">Expand all</button>
+  <button id="collapse" type="button">Collapse all</button>
+  <span class="muted" id="count" aria-live="polite"></span>
+</header>
 
-      <ul id="tree" class="tree" role="tree" aria-label="Dashboards"></ul>
-
-      <div class="footer">
-        <span class="muted">Open/closed state saves to this browser.</span>
-        <span class="muted">Deep link: <code>?q=west&open=event-roi/sdr</code></span>
-      </div>
-    </div>
-  </div>
+<ul id="tree" class="tree" role="tree"></ul>
 
 <script>
-/*** 1) DATA — exact links from your message ***/
+/*** DATA (all links included) ***/
 const data = [
   {
     id: "event-roi",
@@ -186,6 +85,7 @@ const data = [
                 id: "team-kpis-korth",
                 title: "Korth",
                 url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
+                // Note: query string retained; browsers will handle it. If you paste this into HTML elsewhere, ensure '&' is escaped.
               }
             ]
           }
@@ -211,146 +111,117 @@ const data = [
   }
 ];
 
-/*** 2) STATE ***/
+/*** CORE TREE (vanilla JS) ***/
+const treeEl = document.getElementById("tree");
+const qEl = document.getElementById("q");
+const countEl = document.getElementById("count");
 const OPEN_KEY = "dash_tree_open_ids_v1";
+
 let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
-const saveOpen = () => localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet]));
+function saveOpen() { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); }
+function isLeaf(node) { return !node.children || node.children.length === 0; }
 
-/*** 3) DOM refs ***/
-const treeEl   = document.getElementById("tree");
-const qEl      = document.getElementById("q");
-const clearEl  = document.getElementById("clear");
-const expandEl = document.getElementById("expand");
-const collapseEl = document.getElementById("collapse");
-const countEl  = document.getElementById("count");
-
-/*** 4) Helpers ***/
-const isLeaf   = (n) => !n.children || n.children.length === 0;
-const flatten  = (nodes, acc=[]) => { for (const n of nodes){ acc.push(n); if(n.children) flatten(n.children, acc); } return acc; };
-
-/*** 5) Render ***/
-function render(nodes, parentEl){
+function render(nodes, parentEl) {
   parentEl.innerHTML = "";
-  let leaves = 0;
-  for (const node of nodes){
+  let totalLeaves = 0;
+  for (const node of nodes) {
     const li = document.createElement("li");
     li.className = "node";
     li.dataset.id = node.id;
-    li.setAttribute("role","treeitem");
+    li.setAttribute("role", "treeitem");
     li.setAttribute("aria-expanded", openSet.has(node.id));
 
     const row = document.createElement("div");
     row.className = "row";
 
-    // Toggle
     const tog = document.createElement("button");
     tog.className = "toggle" + (isLeaf(node) ? " leaf" : "");
-    tog.type = "button";
+    tog.setAttribute("type", "button");
     tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
-    tog.setAttribute("aria-expanded", openSet.has(node.id));
-    tog.innerHTML = `
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>`;
+    tog.textContent = openSet.has(node.id) ? "▾" : "▸";
     tog.addEventListener("click", () => toggleNode(node.id, li));
     row.appendChild(tog);
 
-    // Icon
-    const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    icon.setAttribute("viewBox","0 0 24 24"); icon.setAttribute("class","icon");
-    if(isLeaf(node) && node.url){
-      icon.innerHTML = `<path d="M10 14l8-8M14 6h4v4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 7H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
-    } else {
-      icon.innerHTML = `<path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" fill="currentColor" opacity=".15"/><path d="M3 7a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/>`;
-    }
-    row.appendChild(icon);
-
-    // Label
     const label = document.createElement(node.url ? "a" : "span");
-    if (node.url){ label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
+    if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
     label.textContent = node.title || node.id;
-    label.className = "titlelink";
     row.appendChild(label);
-
-    // Optional right-side chip (example: leaf with url)
-    if(node.url){
-      const chip = document.createElement("span");
-      chip.className = "chip muted";
-      chip.textContent = "opens in new tab";
-      row.appendChild(chip);
-    } else {
-      const spacer = document.createElement("span"); spacer.textContent=""; row.appendChild(spacer);
-    }
 
     li.appendChild(row);
     parentEl.appendChild(li);
 
-    if (!isLeaf(node)){
+    if (!isLeaf(node)) {
       const children = document.createElement("ul");
       children.className = "children" + (openSet.has(node.id) ? "" : " hidden");
-      children.setAttribute("role","group");
+      children.setAttribute("role", "group");
       li.appendChild(children);
-      leaves += render(node.children, children);
+      totalLeaves += render(node.children, children);
     } else {
-      leaves += 1;
+      totalLeaves += 1;
     }
   }
-  return leaves;
+  return totalLeaves;
 }
 
-function toggleNode(id, liEl){
+function toggleNode(id, liEl) {
+  if (!liEl.querySelector(":scope > .children")) return;
+  const isOpen = openSet.has(id);
   const children = liEl.querySelector(":scope > .children");
-  if (!children) return;
-  const open = openSet.has(id);
-  const btn  = liEl.querySelector(":scope > .row .toggle");
-  if (open) openSet.delete(id); else openSet.add(id);
+  const btn = liEl.querySelector(":scope > .row .toggle");
+  if (isOpen) openSet.delete(id); else openSet.add(id);
   saveOpen();
-  children.classList.toggle("hidden", open);
-  btn.setAttribute("aria-expanded", String(!open));
-  liEl.setAttribute("aria-expanded", String(!open));
+  btn.textContent = isOpen ? "▸" : "▾";
+  children.classList.toggle("hidden", isOpen);
+  liEl.setAttribute("aria-expanded", !isOpen);
 }
 
-/*** 6) Filter ***/
-function filterTree(query){
-  query = (query||"").trim().toLowerCase();
-  treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hit","hidden"));
+function flatten(nodes, arr=[]) {
+  for (const n of nodes) {
+    arr.push(n);
+    if (n.children) flatten(n.children, arr);
+  }
+  return arr;
+}
 
-  if (!query){
-    // Reset to saved state
-    for (const node of treeEl.querySelectorAll(".node")){
-      const id = node.dataset.id;
-      const children = node.querySelector(":scope > .children");
-      const tog = node.querySelector(":scope > .row .toggle");
-      if (children && tog){
+function filterTree(query) {
+  query = query.trim().toLowerCase();
+  treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hit"));
+  if (!query) {
+    treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
+    treeEl.querySelectorAll(".node").forEach(n => {
+      const id = n.dataset.id;
+      const children = n.querySelector(":scope > .children");
+      const tog = n.querySelector(":scope > .row .toggle");
+      if (children && tog) {
         const open = openSet.has(id);
         children.classList.toggle("hidden", !open);
-        tog.setAttribute("aria-expanded", String(open));
-        node.setAttribute("aria-expanded", String(open));
+        tog.textContent = open ? "▾" : "▸";
+        n.setAttribute("aria-expanded", open);
       }
-    }
+    });
     return;
   }
 
-  // Compute matches
   const all = flatten(data);
-  const hits = new Set(all.filter(n => (n.title||n.id).toLowerCase().includes(query)).map(n => n.id));
+  const hits = new Set(
+    all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id)
+  );
 
-  function markVisibility(node){
+  function markVisibility(node) {
     const selfHit = hits.has(node.id);
     let childVisible = false;
     (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
     const visible = selfHit || childVisible;
     const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
-    if (el){
+    if (el) {
       el.classList.toggle("hidden", !visible);
       if (visible) el.classList.add("hit");
       const children = el.querySelector(":scope > .children");
       const tog = el.querySelector(":scope > .row .toggle");
-      if (children && tog){
-        // Auto-open when a descendant matches
+      if (children && tog) {
         children.classList.toggle("hidden", !childVisible);
-        tog.setAttribute("aria-expanded", String(childVisible));
-        el.setAttribute("aria-expanded", String(childVisible));
+        tog.textContent = childVisible ? "▾" : "▸";
+        el.setAttribute("aria-expanded", childVisible);
       }
     }
     return visible;
@@ -358,31 +229,28 @@ function filterTree(query){
   data.forEach(root => markVisibility(root));
 }
 
-/*** 7) Controls & init ***/
-function countLeaves(nodes){
-  let c=0; for (const n of nodes){ if(n.children){ c+=countLeaves(n.children);} else { c++; } } return c;
-}
+/*** INIT + CONTROLS ***/
 const leaves = render(data, treeEl);
 countEl.textContent = `Dashboards: ${leaves}`;
 
-qEl.addEventListener("input", () => filterTree(qEl.value));
-clearEl.addEventListener("click", () => { qEl.value=""; filterTree(""); qEl.focus(); });
-
-expandEl.addEventListener("click", () => {
-  const ids = flatten(data).filter(n => !(!n.children || n.children.length===0)).map(n => n.id);
+document.getElementById("expand").addEventListener("click", () => {
+  const ids = flatten(data).filter(n => !isLeaf(n)).map(n => n.id);
   openSet = new Set(ids); saveOpen();
   treeEl.querySelectorAll(".children").forEach(ul => ul.classList.remove("hidden"));
-  treeEl.querySelectorAll(".toggle").forEach(t => t.setAttribute("aria-expanded","true"));
-  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded","true"));
-});
-collapseEl.addEventListener("click", () => {
-  openSet = new Set(); saveOpen();
-  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.add("hidden"));
-  treeEl.querySelectorAll(".toggle").forEach(t => t.setAttribute("aria-expanded","false"));
-  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded","false"));
+  treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▾");
+  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", true));
 });
 
-// Deep links
+document.getElementById("collapse").addEventListener("click", () => {
+  openSet = new Set(); saveOpen();
+  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.add("hidden"));
+  treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▸");
+  treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", false));
+});
+
+qEl.addEventListener("input", () => filterTree(qEl.value));
+
+/*** Optional deep-links: ?q=west&open=event-roi/sdr ***/
 const params = new URLSearchParams(location.search);
 if (params.get("open")) { params.get("open").split("/").forEach(id => openSet.add(id)); saveOpen(); }
 if (params.get("q")) { qEl.value = params.get("q"); }
