@@ -5,34 +5,235 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dashboards Tree</title>
 <style>
-  :root { --gap: 6px; --radius: 10px; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-  body { margin: 20px; }
-  header { display:flex; gap: var(--gap); align-items:center; margin-bottom: 10px; flex-wrap: wrap; }
-  input[type="search"] { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); min-width: 280px; }
-  button { padding: 8px 10px; border: 1px solid #ccc; border-radius: var(--radius); background: #f8f8f8; cursor: pointer; }
-  button:hover { background: #f0f0f0; }
-  .tree { list-style: none; padding-left: 0; }
-  .node { margin: 2px 0; }
-  .row { display:flex; align-items:center; gap: 6px; padding: 4px; border-radius: 8px; }
-  .row:hover { background: #f7f7f7; }
-  .toggle { width: 1.4em; height: 1.4em; display: inline-grid; place-items:center; font-weight: 700; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; }
+  /* --------- Design tokens --------- */
+  :root{
+    --radius: 12px;
+    --gap: 8px;
+    --ring: 2px;
+    --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+
+    /* Light */
+    --bg: #f7f7fb;
+    --panel: #ffffff;
+    --text: #1f2328;
+    --muted: #6b7280;
+    --muted-2: #9aa1ab;
+    --line: #e7e7ef;
+    --hover: #f4f5f8;
+    --btn: #f6f7fa;
+    --btn-border: #e2e5ea;
+    --accent: #2563eb;
+    --accent-soft: rgba(37, 99, 235, .08);
+    --hit: rgba(37,99,235,.12);
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg: #0b0d12;
+      --panel: #0f131a;
+      --text: #e5e7eb;
+      --muted: #9aa3ad;
+      --muted-2: #7e8896;
+      --line: #1e2430;
+      --hover: #151b24;
+      --btn: #10151d;
+      --btn-border: #1e2633;
+      --accent: #60a5fa;
+      --accent-soft: rgba(96,165,250,.12);
+      --hit: rgba(96,165,250,.18);
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+
+  /* --------- Global --------- */
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    padding: 24px;
+    background: radial-gradient(1200px 500px at 10% -10%, var(--accent-soft), transparent 40%) no-repeat, var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.35;
+  }
+
+  .app{
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .panel{
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: clip;
+  }
+
+  /* --------- Header / Controls --------- */
+  header{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: saturate(140%) blur(6px);
+    background: color-mix(in hsl, var(--bg), transparent 40%);
+    padding: 6px 0 14px;
+  }
+
+  .toolbar{
+    display:flex; flex-wrap:wrap; align-items:center; gap: 10px;
+  }
+
+  .title{
+    font-weight: 700;
+    font-size: 18px;
+    margin-right: auto;
+    letter-spacing: .2px;
+  }
+
+  input[type="search"]{
+    appearance: none;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--btn-border);
+    background: var(--panel);
+    min-width: 280px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    color: var(--text);
+  }
+  input[type="search"]::placeholder{ color: var(--muted-2); }
+  input[type="search"]:focus-visible{
+    outline: none;
+    box-shadow: 0 0 0 var(--ring) var(--accent-soft);
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--btn-border));
+  }
+
+  .btn{
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--btn-border);
+    background: var(--btn);
+    color: var(--text);
+    cursor: pointer;
+    line-height: 1;
+    display:inline-flex; align-items:center; gap:8px;
+    transition: background .15s ease, transform .04s ease;
+  }
+  .btn:hover{ background: var(--hover); }
+  .btn:active{ transform: translateY(1px); }
+  .btn:focus-visible{ outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft); }
+
+  .count{
+    color: var(--muted);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,.02));
+  }
+
+  /* --------- Tree --------- */
+  .tree{
+    list-style: none;
+    padding: 6px 8px 16px;
+    margin: 0;
+  }
+  .node{ margin: 4px 0; }
+
+  .row{
+    display:flex; align-items:center; gap: 8px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    transition: background .12s ease, outline-color .12s ease;
+  }
+  .row:hover{ background: var(--hover); }
+  .row.hit{ background: var(--hit); }
+
+  .toggle{
+    width: 1.6em; height: 1.6em;
+    display: inline-grid; place-items:center;
+    font-weight: 800;
+    border: 1px solid var(--btn-border);
+    border-radius: 8px;
+    background: var(--panel);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .toggle:hover{ background: var(--hover); }
   .toggle.leaf { visibility: hidden; }
-  .children { margin-left: 20px; padding-left: 10px; border-left: 1px dashed #ddd; }
-  .hidden { display: none !important; }
-  a { text-decoration: none; }
-  .muted { color: #666; font-size: 12px; }
-  .hit a { outline: 2px solid rgba(0,0,0,.1); border-radius: 6px; padding: 2px 4px; }
+
+  .label{
+    display:inline-flex; align-items:center; gap:8px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .label:hover{ text-decoration: underline; text-underline-offset: 3px; }
+  .label[target="_blank"]::after{
+    content: "↗";
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: 2px;
+  }
+
+  .badge{
+    margin-left: 4px;
+    font-size: 11px;
+    color: var(--muted);
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,.02));
+  }
+
+  .children{
+    margin-left: 22px;
+    padding-left: 12px;
+    border-left: 1px dashed var(--line);
+
+    /* micro-animation (non-blocking) */
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity .14s ease, transform .14s ease;
+  }
+  .children.open{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hidden{ display: none !important; }
+
+  /* Accessibility */
+  .row:focus-within{
+    outline: var(--ring) solid transparent;
+    box-shadow: 0 0 0 var(--ring) var(--accent-soft);
+  }
+  .toggle:focus-visible{ outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft); }
+  .label:focus-visible{ outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft); border-radius: 8px; }
+
+  /* Container card for the tree */
+  .shell{
+    margin-top: 14px;
+  }
 </style>
 </head>
 <body>
-<header>
-  <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
-  <button id="expand" type="button">Expand all</button>
-  <button id="collapse" type="button">Collapse all</button>
-  <span class="muted" id="count" aria-live="polite"></span>
-</header>
+  <div class="app">
+    <header>
+      <div class="toolbar panel" style="padding:12px; gap:12px;">
+        <div class="title">Dashboards</div>
+        <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
+        <button id="expand" type="button" class="btn" title="Expand all">Expand all</button>
+        <button id="collapse" type="button" class="btn" title="Collapse all">Collapse all</button>
+        <span class="count" id="count" aria-live="polite"></span>
+      </div>
+    </header>
 
-<ul id="tree" class="tree" role="tree"></ul>
+    <div class="shell panel">
+      <ul id="tree" class="tree" role="tree" aria-label="Dashboards tree"></ul>
+    </div>
+  </div>
 
 <script>
 /*** DATA (all links included) ***/
@@ -85,7 +286,6 @@ const data = [
                 id: "team-kpis-korth",
                 title: "Korth",
                 url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
-                // Note: query string retained; browsers will handle it. If you paste this into HTML elsewhere, ensure '&' is escaped.
               }
             ]
           }
@@ -121,9 +321,16 @@ let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
 function saveOpen() { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); }
 function isLeaf(node) { return !node.children || node.children.length === 0; }
 
+/* Small helper to show a tiny descendant count badge (purely visual) */
+function leafCount(node){
+  if (isLeaf(node)) return 1;
+  return (node.children || []).reduce((sum, ch) => sum + leafCount(ch), 0);
+}
+
 function render(nodes, parentEl) {
   parentEl.innerHTML = "";
   let totalLeaves = 0;
+
   for (const node of nodes) {
     const li = document.createElement("li");
     li.className = "node";
@@ -144,15 +351,26 @@ function render(nodes, parentEl) {
 
     const label = document.createElement(node.url ? "a" : "span");
     if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
+    label.className = "label";
     label.textContent = node.title || node.id;
     row.appendChild(label);
+
+    // Optional: descendant count badge (keeps functionality unchanged)
+    if (!isLeaf(node)) {
+      const b = document.createElement("span");
+      b.className = "badge";
+      b.textContent = leafCount(node);
+      b.setAttribute("aria-label", "Total dashboards in this branch");
+      row.appendChild(b);
+    }
 
     li.appendChild(row);
     parentEl.appendChild(li);
 
     if (!isLeaf(node)) {
       const children = document.createElement("ul");
-      children.className = "children" + (openSet.has(node.id) ? "" : " hidden");
+      const isOpen = openSet.has(node.id);
+      children.className = "children" + (isOpen ? " open" : " hidden");
       children.setAttribute("role", "group");
       li.appendChild(children);
       totalLeaves += render(node.children, children);
@@ -170,9 +388,20 @@ function toggleNode(id, liEl) {
   const btn = liEl.querySelector(":scope > .row .toggle");
   if (isOpen) openSet.delete(id); else openSet.add(id);
   saveOpen();
+
   btn.textContent = isOpen ? "▸" : "▾";
-  children.classList.toggle("hidden", isOpen);
   liEl.setAttribute("aria-expanded", !isOpen);
+
+  // keep existing 'hidden' logic but add an 'open' flag for nicer animation
+  if (isOpen){
+    children.classList.remove("open");
+    children.classList.add("hidden");
+  } else {
+    children.classList.remove("hidden");
+    // force reflow so the open transition plays even after display toggle
+    void children.offsetWidth;
+    children.classList.add("open");
+  }
 }
 
 function flatten(nodes, arr=[]) {
@@ -184,8 +413,9 @@ function flatten(nodes, arr=[]) {
 }
 
 function filterTree(query) {
-  query = query.trim().toLowerCase();
-  treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hit"));
+  query = (query || "").trim().toLowerCase();
+  treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
+
   if (!query) {
     treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
     treeEl.querySelectorAll(".node").forEach(n => {
@@ -195,6 +425,7 @@ function filterTree(query) {
       if (children && tog) {
         const open = openSet.has(id);
         children.classList.toggle("hidden", !open);
+        children.classList.toggle("open", open);
         tog.textContent = open ? "▾" : "▸";
         n.setAttribute("aria-expanded", open);
       }
@@ -212,14 +443,18 @@ function filterTree(query) {
     let childVisible = false;
     (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
     const visible = selfHit || childVisible;
+
     const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
     if (el) {
       el.classList.toggle("hidden", !visible);
-      if (visible) el.classList.add("hit");
+      const row = el.querySelector(":scope > .row");
+      if (visible && row) row.classList.add("hit");
+
       const children = el.querySelector(":scope > .children");
       const tog = el.querySelector(":scope > .row .toggle");
       if (children && tog) {
         children.classList.toggle("hidden", !childVisible);
+        children.classList.toggle("open", childVisible);
         tog.textContent = childVisible ? "▾" : "▸";
         el.setAttribute("aria-expanded", childVisible);
       }
@@ -236,14 +471,23 @@ countEl.textContent = `Dashboards: ${leaves}`;
 document.getElementById("expand").addEventListener("click", () => {
   const ids = flatten(data).filter(n => !isLeaf(n)).map(n => n.id);
   openSet = new Set(ids); saveOpen();
-  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.remove("hidden"));
+
+  treeEl.querySelectorAll(".children").forEach(ul => {
+    ul.classList.remove("hidden");
+    // force reflow then open for smoothness
+    void ul.offsetWidth;
+    ul.classList.add("open");
+  });
   treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▾");
   treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", true));
 });
 
 document.getElementById("collapse").addEventListener("click", () => {
   openSet = new Set(); saveOpen();
-  treeEl.querySelectorAll(".children").forEach(ul => ul.classList.add("hidden"));
+  treeEl.querySelectorAll(".children").forEach(ul => {
+    ul.classList.remove("open");
+    ul.classList.add("hidden");
+  });
   treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▸");
   treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", false));
 });
