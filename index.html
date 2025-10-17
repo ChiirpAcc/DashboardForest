@@ -6,137 +6,75 @@
 <title>Dashboard Forest • CHIIRP</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%2300a87e'/%3E%3Cpath d='M50 20 L70 55 H30 Z' fill='white'/%3E%3C/svg%3E">
 <style>
-  /* ---------- Theme ---------- */
+  /* Theme */
   :root{
-    --bg: #f7f8fa;
-    --card: #ffffff;
-    --text: #0f172a;
-    --muted: #5b6475;
-    --line: #e5e7eb;
-    --accent: #00a87e;
-    --accent-weak: #19c49b15;
-    --shadow: 0 6px 24px rgba(15,23,42,.06), 0 2px 8px rgba(15,23,42,.04);
-    --radius: 14px;
-    --radius-sm: 10px;
-    --ring: 0 0 0 3px rgba(0,168,126,.25);
-    --trans: 170ms cubic-bezier(.2,.8,.2,1);
+    --bg:#f7f8fa; --card:#fff; --text:#0f172a; --muted:#5b6475; --line:#e5e7eb;
+    --accent:#00a87e; --accent-weak:#19c49b15; --shadow:0 6px 24px rgba(15,23,42,.06),0 2px 8px rgba(15,23,42,.04);
+    --radius:14px; --radius-sm:10px; --ring:0 0 0 3px rgba(0,168,126,.25); --trans:170ms cubic-bezier(.2,.8,.2,1);
   }
-  @media (prefers-color-scheme: dark){
+  @media (prefers-color-scheme:dark){
     :root{
-      --bg: #0b1020;
-      --card: #11172a;
-      --text: #e6e8ee;
-      --muted: #9aa3b2;
-      --line: #22304a;
-      --accent: #19c49b;
-      --accent-weak: #19c49b22;
-      --shadow: 0 8px 24px rgba(0,0,0,.35);
-      --ring: 0 0 0 3px rgba(25,196,155,.35);
+      --bg:#0b1020; --card:#11172a; --text:#e6e8ee; --muted:#9aa3b2; --line:#22304a;
+      --accent:#19c49b; --accent-weak:#19c49b22; --shadow:0 8px 24px rgba(0,0,0,.35); --ring:0 0 0 3px rgba(25,196,155,.35);
     }
   }
 
-  /* ---------- Layout ---------- */
+  /* Layout */
   html,body{height:100%}
-  body{
-    margin:0; background: var(--bg); color: var(--text);
-    font: 15px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  }
-  .container{max-width: 1100px; margin: 28px auto; padding: 0 16px;}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  .container{max-width:1100px;margin:28px auto;padding:0 16px}
   .header{
-    background: linear-gradient(135deg, var(--accent-weak), transparent 60%);
-    border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 18px; display:flex; align-items:center; justify-content:space-between; gap: 12px;
-    box-shadow: var(--shadow);
+    background:linear-gradient(135deg,var(--accent-weak),transparent 60%);
+    border:1px solid var(--line);border-radius:var(--radius);padding:18px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow)
   }
-  .title{display:flex; gap:12px; align-items:center}
-  .logo{
-    width:38px;height:38px;border-radius:12px;background:var(--accent);
-    display:grid;place-items:center; color:#fff; font-weight:800;
-    box-shadow: 0 6px 18px rgba(0,168,126,.35);
-  }
-  .title h1{font-size:18px; margin:0}
-  .title p{margin:0; color:var(--muted); font-size:13px}
-  .controls{display:flex; gap:8px; flex-wrap:wrap}
-  .control{
-    padding:8px 12px; border-radius:10px; border:1px solid var(--line);
-    background: var(--card); cursor:pointer; transition: background var(--trans), transform var(--trans);
-  }
-  .control:hover{ transform: translateY(-1px) }
-  .control:focus-visible{ outline: none; box-shadow: var(--ring); }
-  .search{
-    display:flex; align-items:center; gap:8px; background: var(--card);
-    border:1px solid var(--line); border-radius: 10px; padding: 6px 10px; min-width: 260px;
-  }
-  .search input{ border:none; outline:none; background:transparent; width:220px; color: var(--text) }
-  .search .clear{ background:transparent; border:none; cursor:pointer; color: var(--muted) }
+  .title{display:flex;gap:12px;align-items:center}
+  .logo{width:38px;height:38px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 6px 18px rgba(0,168,126,.35)}
+  .title h1{margin:0;font-size:18px}
+  .title p{margin:0;color:var(--muted);font-size:13px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap}
+  .control{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer;transition:background var(--trans),transform var(--trans)}
+  .control:hover{transform:translateY(-1px)}
+  .control:focus-visible{outline:none;box-shadow:var(--ring)}
+  .search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;min-width:260px}
+  .search input{border:none;outline:none;background:transparent;width:220px;color:var(--text)}
+  .search .clear{background:transparent;border:none;cursor:pointer;color:var(--muted)}
 
-  /* ---------- Cards / Sections ---------- */
-  .sections{ margin-top: 18px; display: grid; grid-template-columns: 1fr; gap: 16px; }
-  @media (min-width: 900px){ .sections{ grid-template-columns: 1fr 1fr; } }
-  .card{
-    background: var(--card); border:1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow); overflow: hidden;
-    transition: box-shadow var(--trans), transform var(--trans);
-  }
-  .card:hover{ transform: translateY(-2px); }
-  .card-head{ display:flex; align-items:center; justify-content:space-between; padding: 14px 16px; }
-  .card-head h2{ margin:0; font-size:16px; display:flex; align-items:center; gap:10px }
-  .badge{ font-size:12px; color: var(--muted); padding:4px 8px; border:1px solid var(--line); border-radius: 999px; background: var(--accent-weak) }
-  .card-body{ padding: 6px 2px 12px 10px; }
+  /* Sections / cards */
+  .sections{margin-top:18px;display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:900px){.sections{grid-template-columns:1fr 1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow var(--trans),transform var(--trans)}
+  .card:hover{transform:translateY(-2px)}
+  .card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px}
+  .card-head h2{margin:0;font-size:16px;display:flex;align-items:center;gap:10px}
+  .badge{font-size:12px;color:var(--muted);padding:4px 8px;border:1px solid var(--line);border-radius:999px;background:var(--accent-weak)}
+  .card-body{padding:6px 2px 12px 10px}
 
-  /* ---------- Tree ---------- */
-  .tree{ list-style:none; padding-left: 12px; margin:0; }
-  .node{ margin: 2px 0; position: relative; }
-  .node:before{
-    content:""; position:absolute; left: 13px; top: 22px; bottom: -6px; width: 1px; background: var(--line);
-  }
-  .node:last-child:before{ display:none }
-  .row{
-    display:flex; align-items:center; gap:10px; padding:8px 10px; margin-left:8px; margin-right:8px;
-    border-radius: var(--radius-sm); transition: background var(--trans);
-  }
-  .row:hover{ background: var(--accent-weak); }
-  .toggle{
-    width: 22px; height: 22px; display:grid; place-items:center;
-    border:1px solid var(--line); border-radius:8px; background: var(--card); cursor:pointer;
-    transition: transform var(--trans), background var(--trans);
-  }
-  .toggle svg{ width: 14px; height: 14px }
-  .toggle.leaf{ visibility: hidden }
-  .children{
-    margin-left: 28px; padding-left: 10px; border-left: 1px dashed var(--line);
-    overflow: clip;
-  }
-  .hidden{ display:none !important }
-  .link{
-    text-decoration:none; color: var(--text); font-weight: 600;
-  }
-  .link:hover{ text-decoration: underline }
-  .meta{ color: var(--muted); font-size: 12px; }
-  .actions{ display:flex; gap:6px; margin-left:auto }
-  .iconbtn{
-    display:grid; place-items:center; width:26px; height:26px; border:1px solid var(--line);
-    border-radius:8px; background: var(--card); cursor:pointer; transition: transform var(--trans), background var(--trans);
-  }
-  .iconbtn:hover{ transform: translateY(-1px); }
-  .iconbtn:focus-visible{ outline:none; box-shadow: var(--ring); }
-  .hit .row{ background: var(--accent-weak); }
-  .count{ color: var(--muted); font-size: 12px; }
+  /* Tree */
+  .tree{list-style:none;padding-left:12px;margin:0}
+  .node{margin:2px 0;position:relative}
+  .node:before{content:"";position:absolute;left:13px;top:22px;bottom:-6px;width:1px;background:var(--line)}
+  .node:last-child:before{display:none}
+  .row{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-left:8px;margin-right:8px;border-radius:var(--radius-sm);transition:background var(--trans)}
+  .row:hover{background:var(--accent-weak)}
+  .toggle{width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--line);border-radius:8px;background:var(--card);cursor:pointer;transition:transform var(--trans),background var(--trans)}
+  .toggle svg{width:14px;height:14px}
+  .toggle.leaf{visibility:hidden}
+  .children{margin-left:28px;padding-left:10px;border-left:1px dashed var(--line);overflow:clip}
+  .hidden{display:none!important}
+  .link{text-decoration:none;color:var(--text);font-weight:600}
+  .link:hover{text-decoration:underline}
+  .actions{display:flex;gap:6px;margin-left:auto}
+  .iconbtn{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--line);border-radius:8px;background:var(--card);cursor:pointer;transition:transform var(--trans),background var(--trans)}
+  .iconbtn:hover{transform:translateY(-1px)}
+  .iconbtn:focus-visible{outline:none;box-shadow:var(--ring)}
+  .hit .row{background:var(--accent-weak)}
 
-  /* ---------- Toast ---------- */
-  .toast{
-    position: fixed; left: 50%; transform: translateX(-50%);
-    bottom: 20px; background: var(--text); color: var(--card);
-    padding: 10px 14px; border-radius: 10px; opacity:0; pointer-events:none;
-    transition: opacity var(--trans), transform var(--trans);
-  }
-  .toast.show{ opacity:1; transform: translateX(-50%) translateY(-4px) }
-
-  /* ---------- Motion ---------- */
-  .fade-slide{ animation: fadeSlide .35s ease both }
-  @keyframes fadeSlide{
-    from{ opacity:0; transform: translateY(4px) } to{ opacity:1; transform: none }
-  }
+  /* Toast + motion */
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:var(--text);color:var(--card);padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity var(--trans),transform var(--trans)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+  .fade-slide{animation:fadeSlide .35s ease both}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -166,7 +104,7 @@
   </div>
 
 <script>
-/* ===================== Data ===================== */
+/* ============ EXACT STRUCTURE & LINKS (as provided) ============ */
 const data = [
   {
     id: "event-roi",
@@ -181,8 +119,16 @@ const data = [
             id: "event-roi-sept-by-event",
             title: "By Event",
             children: [
-              { id: "event-roi-sept-hsf", title: "Home Service Freedom", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392" },
-              { id: "event-roi-sept-certain-path", title: "Certain path", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704" }
+              {
+                id: "event-roi-sept-hsf",
+                title: "Home Service Freedom",
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392"
+              },
+              {
+                id: "event-roi-sept-certain-path",
+                title: "Certain path",
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704"
+              }
             ]
           }
         ]
@@ -191,6 +137,7 @@ const data = [
       { id: "event-roi-nov", title: "November" }
     ]
   },
+
   {
     id: "team-kpis",
     title: "Team KPI's",
@@ -204,15 +151,18 @@ const data = [
             id: "team-kpis-by-ae",
             title: "By AE",
             children: [
-              { id: "team-kpis-korth",
+              {
+                id: "team-kpis-korth",
                 title: "Korth",
-                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE" }
+                url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261197?appliedIlsFilters=JTdCJTIyMTM3MjYxMTk3JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMmh1YnNwb3Rfb3duZXJfaWQlMjIlMkMlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWUlMjIlM0ElN0IlMjJwcm9wZXJ0eVR5cGUlMjIlM0ElMjJlbnVtZXJhdGlvbiUyMiUyQyUyMm9wZXJhdG9yJTIyJTNBJTIySVNfQU5ZX09GJTIyJTJDJTIydmFsdWVzJTIyJTNBJTVCJTIyNzI5NTM2NjkxJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
+              }
             ]
           }
         ]
       }
     ]
   },
+
   {
     id: "sdr",
     title: "SDR",
@@ -222,6 +172,7 @@ const data = [
       { id: "sdr-daily",   title: "Daily",   url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/136880234" }
     ]
   },
+
   {
     id: "cancellations",
     title: "Cancelations",
@@ -231,7 +182,7 @@ const data = [
   }
 ];
 
-/* ===================== Utilities ===================== */
+/* ============ Utilities ============ */
 const qs = (s,el=document)=>el.querySelector(s);
 const qsa = (s,el=document)=>[...el.querySelectorAll(s)];
 const OPEN_KEY = "df_open_set_v1";
@@ -239,14 +190,9 @@ let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
 const saveOpen = ()=>localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet]));
 const isLeaf = n => !n.children || n.children.length===0;
 const flatten=(nodes,arr=[])=>{ for(const n of nodes){arr.push(n); if(n.children) flatten(n.children,arr);} return arr; };
-const toast = (msg)=>{
-  const el = qs('#toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 1300);
-};
+const toast = msg => { const t = qs('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1300); };
 
-/* ===================== Rendering ===================== */
+/* ============ Rendering ============ */
 const sectionsEl = qs('#sections');
 
 function sectionCard(section){
@@ -268,8 +214,8 @@ function renderTree(nodes, parentEl){
   let leaves = 0;
 
   for(const node of nodes){
+    // Skip printing the synthetic top row in each card: render its children as roots
     if(node === nodes[0] && parentEl.id?.startsWith('tree-') && node.children){
-      // skip rendering the synthetic root row in section cards
       for(const ch of node.children){ leaves += renderTree([ch], parentEl); }
       qs(`#badge-${node.id}`)?.replaceChildren(`${leaves} item${leaves!==1?'s':''}`);
       return leaves;
@@ -286,20 +232,19 @@ function renderTree(nodes, parentEl){
 
     const tog = document.createElement('button');
     tog.className = 'toggle' + (isLeaf(node)?' leaf':'');
-    tog.setAttribute('type','button');
+    tog.type = 'button';
     tog.setAttribute('aria-label', isLeaf(node)?'leaf':'toggle');
     tog.innerHTML = `<svg viewBox="0 0 24 24"><path fill="currentColor" d="${openSet.has(node.id)?'M7 10l5 5 5-5z':'M9 6l6 6-6 6'}"/></svg>`;
     tog.addEventListener('click', ()=>toggleNode(node.id, li));
     row.appendChild(tog);
 
     const label = document.createElement(node.url ? 'a' : 'span');
-    if(node.url){ label.href = node.url; label.target = '_blank'; label.rel = 'noopener noreferrer'; label.className='link'; }
+    if(node.url){ label.href = node.url; label.target = '_blank'; label.rel='noopener noreferrer'; label.className='link'; }
     label.textContent = node.title || node.id;
     row.appendChild(label);
 
     // right-side actions for links
-    const actions = document.createElement('div');
-    actions.className = 'actions';
+    const actions = document.createElement('div'); actions.className='actions';
     if(node.url){
       const openIcon = document.createElement('a');
       openIcon.href = node.url; openIcon.target='_blank'; openIcon.rel='noopener noreferrer';
@@ -310,10 +255,7 @@ function renderTree(nodes, parentEl){
       const copyBtn = document.createElement('button');
       copyBtn.className='iconbtn'; copyBtn.title='Copy link';
       copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M16 1H4a2 2 0 0 0-2 2v12h2V3h12zM20 5H8a2 2 0 0 0-2 2v14h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m0 16H8V7h12z"/></svg>`;
-      copyBtn.addEventListener('click', async ()=>{
-        try{ await navigator.clipboard.writeText(node.url); toast('Link copied'); }
-        catch{ toast('Copy failed'); }
-      });
+      copyBtn.addEventListener('click', async ()=>{ try{ await navigator.clipboard.writeText(node.url); toast('Link copied'); } catch{ toast('Copy failed'); }});
       actions.appendChild(copyBtn);
     }
     row.appendChild(actions);
@@ -327,7 +269,7 @@ function renderTree(nodes, parentEl){
       children.setAttribute('role','group');
       li.appendChild(children);
       leaves += renderTree(node.children, children);
-    }else{
+    } else {
       leaves += 1;
     }
   }
@@ -346,23 +288,17 @@ function toggleNode(id, liEl){
   liEl.setAttribute('aria-expanded', !open);
 }
 
-/* ===================== Controls & Init ===================== */
-function renderAll(){
-  sectionsEl.innerHTML = '';
-  for(const top of data){ sectionsEl.appendChild(sectionCard(top)); }
-}
+/* ============ Controls / Init ============ */
+function renderAll(){ const el = qs('#sections'); el.innerHTML=''; for(const t of data) el.appendChild(sectionCard(t)); }
 renderAll();
 
 // Search
 const qEl = qs('#q'), clearBtn = qs('#clearSearch');
-const treeEls = ()=>qsa('.tree');
-
 function filterTree(query){
   query = query.trim().toLowerCase();
   qsa('.node').forEach(n=>n.classList.remove('hit','hidden'));
 
   if(!query){
-    // restore per saved state
     qsa('.node').forEach(n=>{
       const id = n.dataset.id;
       const children = n.querySelector(':scope > .children');
@@ -377,37 +313,36 @@ function filterTree(query){
     return;
   }
 
-  const all = flatten(data);
-  const hits = new Set(all.filter(n => (n.title||n.id).toLowerCase().includes(query)).map(n=>n.id));
+  // Expand branches containing matches
+  const all = []; (function flat(ns){ns.forEach(n=>{all.push(n); if(n.children) flat(n.children)});} )(data);
+  const hits = new Set(all.filter(n=>(n.title||n.id).toLowerCase().includes(query)).map(n=>n.id));
 
   function mark(node){
     const self = hits.has(node.id);
-    let childVis = false;
-    (node.children||[]).forEach(ch => { if(mark(ch)) childVis = true; });
-    const visible = self || childVis;
-    const el = qs(`.node[data-id="${CSS.escape(node.id)}"]`);
+    let childVis = false; (node.children||[]).forEach(ch=>{ if(mark(ch)) childVis = true; });
+    const vis = self || childVis;
+    const el = document.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
     if(el){
-      el.classList.toggle('hidden', !visible);
-      if(visible) el.classList.add('hit');
-      const children = el.querySelector(':scope > .children');
+      el.classList.toggle('hidden', !vis);
+      if(vis) el.classList.add('hit');
+      const kids = el.querySelector(':scope > .children');
       const btn = el.querySelector(':scope > .row .toggle');
-      if(children && btn){
-        children.classList.toggle('hidden', !childVis);
+      if(kids && btn){
+        kids.classList.toggle('hidden', !childVis);
         btn.innerHTML = `<svg viewBox="0 0 24 24"><path fill="currentColor" d="${childVis?'M7 10l5 5 5-5z':'M9 6l6 6-6 6'}"/></svg>`;
         el.setAttribute('aria-expanded', childVis);
       }
     }
-    return visible;
+    return vis;
   }
-  data.forEach(root=>mark(root));
+  data.forEach(mark);
 }
-
 qEl.addEventListener('input', ()=>filterTree(qEl.value));
 clearBtn.addEventListener('click', ()=>{ qEl.value=''; filterTree(''); qEl.focus(); });
 
-// Buttons
+// Expand / Collapse / Reset
 qs('#expand').addEventListener('click', ()=>{
-  const ids = flatten(data).filter(n=>!isLeaf(n)).map(n=>n.id);
+  const ids = []; (function flat(ns){ns.forEach(n=>{if(n.children?.length) ids.push(n.id); if(n.children) flat(n.children)})})(data);
   openSet = new Set(ids); saveOpen();
   qsa('.children').forEach(ul=>ul.classList.remove('hidden'));
   qsa('.node').forEach(n=>n.setAttribute('aria-expanded', true));
@@ -423,14 +358,14 @@ qs('#reset').addEventListener('click', ()=>{
   localStorage.removeItem(OPEN_KEY);
   openSet = new Set();
   filterTree(qEl.value || '');
-  toast('State reset');
+  const t = qs('#toast'); t.textContent='State reset'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1300);
 });
 
-// Keyboard shortcuts
+// Keyboard shortcuts: / (focus), x (expand), c (collapse)
 window.addEventListener('keydown', (e)=>{
-  if(e.key === '/' && document.activeElement !== qEl){ e.preventDefault(); qEl.focus(); }
-  if(e.key.toLowerCase() === 'x'){ qs('#expand').click(); }
-  if(e.key.toLowerCase() === 'c'){ qs('#collapse').click(); }
+  if(e.key==='/' && document.activeElement!==qEl){ e.preventDefault(); qEl.focus(); }
+  if(e.key.toLowerCase()==='x'){ qs('#expand').click(); }
+  if(e.key.toLowerCase()==='c'){ qs('#collapse').click(); }
 });
 
 // Deep links
