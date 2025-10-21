@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Dashboards Tree</title>
 <style>
+  /* Ensure UA widgets/icons don't get auto-darkened */
+  :root { color-scheme: light dark; }
+
   /* --------- Design tokens --------- */
   :root{
     --radius: 12px;
@@ -26,6 +29,10 @@
     --accent-soft: rgba(37, 99, 235, .08);
     --hit: rgba(37,99,235,.12);
     --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+
+    /* Icon-specific (light) */
+    --icon: #3f4b5f;
+    --icon-muted: #6b7280;
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -42,6 +49,10 @@
       --accent-soft: rgba(96,165,250,.12);
       --hit: rgba(96,165,250,.18);
       --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+
+      /* Icon-specific (dark) */
+      --icon: #d8dee9;
+      --icon-muted: #aeb6c2;
     }
   }
 
@@ -152,7 +163,9 @@
   .toggle{
     width: 1.6em; height: 1.6em;
     display: inline-grid; place-items:center;
-    font-weight: 800;
+    font-weight: 900;               /* slightly bolder for legibility */
+    font-size: 1rem;                /* clearer chevrons */
+    color: var(--icon);             /* explicit icon color */
     border: 1px solid var(--btn-border);
     border-radius: 8px;
     background: var(--panel);
@@ -173,7 +186,7 @@
   .label[target="_blank"]::after{
     content: "↗";
     font-size: 12px;
-    color: var(--muted);
+    color: var(--icon-muted);  /* was var(--muted); ensure contrast */
     margin-left: 2px;
   }
 
@@ -216,6 +229,31 @@
   .shell{
     margin-top: 14px;
   }
+
+  /* Dark-mode: give toggle border a touch more presence so icons don't sink */
+  @media (prefers-color-scheme: dark){
+    .toggle{ border-color: color-mix(in srgb, var(--btn-border) 80%, var(--text)); }
+  }
+
+  /* Higher contrast users */
+  @media (prefers-contrast: more){
+    .toggle{ box-shadow: 0 0 0 2px var(--accent-soft) inset; }
+    .label[target="_blank"]::after{ font-weight: 700; }
+  }
+
+  /* Windows High Contrast / forced colors */
+  @media (forced-colors: active){
+    .toggle{
+      forced-color-adjust: none;
+      color: ButtonText;
+      border-color: ButtonText;
+      background: Canvas;
+    }
+    .label[target="_blank"]::after{
+      forced-color-adjust: none;
+      color: ButtonText;
+    }
+  }
 </style>
 </head>
 <body>
@@ -253,216 +291,4 @@
         {
           id: "oct-garage-door-freedom",
           title: "Garage Door Freedom",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261375?appliedIlsFilters=JTdCJTIyMTM3MjYxMzc1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMEdhcmFnZSUyMERvb3IlMjBGcmVlZG9tJTIwVmVydGljYWwlMjBUcmFjayUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D"
-        },
-        {
-          id: "oct-legacy-offsite",
-          title: "Legacy Annual Offsite",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261436?appliedIlsFilters=JTdCJTIyMTM3MjYxNDM2JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMExlZ2FjeSUyMEFubnVhbCUyME9mZnNpdGUlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-home-commercial-summit",
-          title: "Home and Commercial Services Marketing Summit",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261525?appliedIlsFilters=JTdCJTIyMTM3MjYxNTI1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMEhvbWUlMjBhbmQlMjBDb21tZXJjaWFsJTIwU2VydmljZXMlMjBNYXJrZXRpbmclMjBTdW1taXQlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-nuve-networks-tour",
-          title: "Nuve Networks Tour",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261580?appliedIlsFilters=JTdCJTIyMTM3MjYxNTgwJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyME51dmUlMjBOZXR3b3JrcyUyMFRvdXIlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-clover-mastermind",
-          title: "Clover Mastermind",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261616?appliedIlsFilters=JTdCJTIyMTM3MjYxNjE2JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMENsb3ZlciUyME1hc3Rlcm1pbmQlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-zoom-drain-expo",
-          title: "Zoom Drain Expo - Vortex",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261632?appliedIlsFilters=JTdCJTIyMTM3MjYxNjMyJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFpvb20lMjBEcmFpbiUyMEV4cG8lMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-service-world",
-          title: "Service World",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137281465?appliedIlsFilters=JTdCJTIyMTM3MjgxNDY1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFNlcnZpY2UlMjBXb3JsZCUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D"
-        },
-        {
-          id: "oct-network-st",
-          title: "Network ST event",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137281465?appliedIlsFilters=JTdCJTIyMTM3MjgxNDY1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFNlcnZpY2UlMjBXb3JsZCUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D"
-        }
-      ]
-    },
-    {
-      id: "sep-2025",
-      title: "September Events",
-      url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137085472",
-      children: [
-        {
-          id: "sep-huge-convention",
-          title: "The HUGE Convention",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137054631?appliedIlsFilters=JTdCJTIyMTM3MDU0NjMxJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFRoZSUyMEh1Z2UlMjBDb252ZW50aW9uJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
-        },
-        { id: "sep-home-service-freedom", title: "Home Service Freedom", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392" },
-        { id: "sep-pantheon", title: "Pantheon", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137054779" },
-        { id: "sep-certain-path", title: "Certain Path Fall Expo \"Partner Jam\"", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704" },
-        { id: "sep-nexstar", title: "Nexstar Super Meeting", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137094368" }
-      ]
-    }
-  ];
-  
-  /*** CORE TREE (same behavior) ***/
-  const treeEl = document.getElementById("tree");
-  const qEl = document.getElementById("q");
-  const countEl = document.getElementById("count");
-  const OPEN_KEY = "dash_tree_open_ids_v1";
-  
-  let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
-  function saveOpen() { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); }
-  function isLeaf(node) { return !node.children || node.children.length === 0; }
-  function leafCount(node){ if (isLeaf(node)) return 1; return (node.children||[]).reduce((s,c)=>s+leafCount(c),0); }
-  
-  function render(nodes, parentEl) {
-    parentEl.innerHTML = "";
-    let totalLeaves = 0;
-  
-    for (const node of nodes) {
-      const li = document.createElement("li");
-      li.className = "node";
-      li.dataset.id = node.id;
-      li.setAttribute("role", "treeitem");
-      li.setAttribute("aria-expanded", openSet.has(node.id));
-  
-      const row = document.createElement("div");
-      row.className = "row";
-  
-      const tog = document.createElement("button");
-      tog.className = "toggle" + (isLeaf(node) ? " leaf" : "");
-      tog.type = "button";
-      tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
-      tog.textContent = openSet.has(node.id) ? "▾" : "▸";
-      tog.addEventListener("click", () => toggleNode(node.id, li));
-      row.appendChild(tog);
-  
-      const label = document.createElement(node.url ? "a" : "span");
-      if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
-      label.className = "label";
-      label.textContent = node.title || node.id;
-      row.appendChild(label);
-  
-      if (!isLeaf(node)) {
-        const b = document.createElement("span");
-        b.className = "badge";
-        b.textContent = leafCount(node);
-        b.setAttribute("aria-label", "Total dashboards in this branch");
-        row.appendChild(b);
-      }
-  
-      li.appendChild(row);
-      parentEl.appendChild(li);
-  
-      if (!isLeaf(node)) {
-        const children = document.createElement("ul");
-        const isOpen = openSet.has(node.id);
-        children.className = "children" + (isOpen ? " open" : " hidden");
-        children.setAttribute("role", "group");
-        li.appendChild(children);
-        totalLeaves += render(node.children, children);
-      } else {
-        totalLeaves += 1;
-      }
-    }
-    return totalLeaves;
-  }
-  
-  function toggleNode(id, liEl) {
-    if (!liEl.querySelector(":scope > .children")) return;
-    const isOpen = openSet.has(id);
-    const children = liEl.querySelector(":scope > .children");
-    const btn = liEl.querySelector(":scope > .row .toggle");
-    if (isOpen) openSet.delete(id); else openSet.add(id);
-    saveOpen();
-    btn.textContent = isOpen ? "▸" : "▾";
-    liEl.setAttribute("aria-expanded", !isOpen);
-    if (isOpen){ children.classList.remove("open"); children.classList.add("hidden"); }
-    else { children.classList.remove("hidden"); void children.offsetWidth; children.classList.add("open"); }
-  }
-  
-  function flatten(nodes, arr=[]) { for (const n of nodes){ arr.push(n); if (n.children) flatten(n.children, arr); } return arr; }
-  
-  function filterTree(query) {
-    query = (query || "").trim().toLowerCase();
-    treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
-    if (!query) {
-      treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
-      treeEl.querySelectorAll(".node").forEach(n => {
-        const id = n.dataset.id;
-        const children = n.querySelector(":scope > .children");
-        const tog = n.querySelector(":scope > .row .toggle");
-        if (children && tog) {
-          const open = openSet.has(id);
-          children.classList.toggle("hidden", !open);
-          children.classList.toggle("open", open);
-          tog.textContent = open ? "▾" : "▸";
-          n.setAttribute("aria-expanded", open);
-        }
-      });
-      return;
-    }
-    const all = flatten(data);
-    const hits = new Set(all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id));
-  
-    function markVisibility(node) {
-      const selfHit = hits.has(node.id);
-      let childVisible = false;
-      (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
-      const visible = selfHit || childVisible;
-  
-      const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
-      if (el) {
-        el.classList.toggle("hidden", !visible);
-        const row = el.querySelector(":scope > .row");
-        if (visible && row) row.classList.add("hit");
-        const children = el.querySelector(":scope > .children");
-        const tog = el.querySelector(":scope > .row .toggle");
-        if (children && tog) {
-          children.classList.toggle("hidden", !childVisible);
-          children.classList.toggle("open", childVisible);
-          tog.textContent = childVisible ? "▾" : "▸";
-          el.setAttribute("aria-expanded", childVisible);
-        }
-      }
-      return visible;
-    }
-    data.forEach(root => markVisibility(root));
-  }
-  
-  /*** INIT + CONTROLS ***/
-  const leaves = render(data, treeEl);
-  countEl.textContent = `Dashboards: ${leaves}`;
-  
-  document.getElementById("expand").addEventListener("click", () => {
-    const ids = flatten(data).filter(n => !isLeaf(n)).map(n => n.id);
-    openSet = new Set(ids); saveOpen();
-    treeEl.querySelectorAll(".children").forEach(ul => { ul.classList.remove("hidden"); void ul.offsetWidth; ul.classList.add("open"); });
-    treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▾");
-    treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", true));
-  });
-  
-  document.getElementById("collapse").addEventListener("click", () => {
-    openSet = new Set(); saveOpen();
-    treeEl.querySelectorAll(".children").forEach(ul => { ul.classList.remove("open"); ul.classList.add("hidden"); });
-    treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▸");
-    treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", false));
-  });
-  
-  qEl.addEventListener("input", () => filterTree(qEl.value));
-  
-  /*** Optional deep-links: ?q=foo&open=oct-2025/sep-2025 ***/
-  const params = new URLSearchParams(location.search);
-  if (params.get("open")) { params.get("open").split("/").forEach(id => openSet.add(id)); saveOpen(); }
-  if (params.get("q")) { qEl.value = params.get("q"); }
-  filterTree(qEl.value || "");
-  </script>
-
-</body>
-</html>
+          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261375?appliedIlsFilters=JTdCJTIyMTM3MjYxMzc1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2
