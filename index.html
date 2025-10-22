@@ -210,6 +210,8 @@
     <button class="tab" role="tab" id="tab-SDR" aria-controls="panel-SDR" aria-selected="false">SDR</button>
     <button class="tab" role="tab" id="tab-Support" aria-controls="panel-Support" aria-selected="false">Support</button>
     <button class="tab" role="tab" id="tab-Exec" aria-controls="panel-Exec" aria-selected="false">Exec</button>
+    <button class="tab" role="tab" id="tab-Events" aria-controls="panel-Events" aria-selected="false">Events</button>
+
   </div>
 </nav>
 
@@ -252,6 +254,12 @@
 <section id="panel-Exec" role="tabpanel" aria-labelledby="tab-Exec" class="tabpanel">
   <div class="shell panel">
     <ul id="tree-Exec" class="tree" role="tree" aria-label="Executive dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Events" role="tabpanel" aria-labelledby="tab-Events" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Events" class="tree" role="tree" aria-label="Events dashboards"></ul>
   </div>
 </section>
 
@@ -309,6 +317,28 @@ const DATA = {
     { id: "exec-weekly",  title: "Weekly",  url: "#" },
     { id: "exec-monthly", title: "Monthly", url: "#" }
   ]
+
+  Events: [
+  {
+    id: "events-2025-oct",
+    title: "October 2025",
+    children: [
+      { id: "evt-25-oct-wealthy-plumber", title: "The Wealthy Plumber", url: "#" },
+      { id: "evt-25-oct-garage-door-freedom", title: "Garage Door Freedom", url: "#" },
+      { id: "evt-25-oct-service-world", title: "Service World", url: "#" }
+    ]
+  },
+  {
+    id: "events-2025-sep",
+    title: "September 2025",
+    children: [
+      { id: "evt-25-sep-huge-convention", title: "The HUGE Convention", url: "#" },
+      { id: "evt-25-sep-home-service-freedom", title: "Home Service Freedom", url: "#" },
+      { id: "evt-25-sep-pantheon", title: "Pantheon", url: "#" }
+    ]
+  }
+]
+
 };
 
   /*** Core tree rendering (reused per tab) ***/
@@ -335,6 +365,8 @@ const DATA = {
   treeEls["SDR"] = document.getElementById("tree-SDR");
   treeEls["Support"] = document.getElementById("tree-Support");
   treeEls["Exec"] = document.getElementById("tree-Exec");
+  treeEls["Events"] = document.getElementById("tree-Events");
+
 
 
   function loadOpen(tab){
