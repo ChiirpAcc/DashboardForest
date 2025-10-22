@@ -201,132 +201,115 @@
         <span class="count" id="count" aria-live="polite"></span>
       </div>
 
-      <nav class="tabs panel" aria-label="Departments">
-        <div role="tablist" aria-orientation="horizontal" class="tablist">
-          <button class="tab" role="tab" id="tab-AE" aria-controls="panel-AE" aria-selected="true">AE</button>
-          <button class="tab" role="tab" id="tab-SDR" aria-controls="panel-SDR" aria-selected="false">SDR</button>
-          <button class="tab" role="tab" id="tab-Onboarding" aria-controls="panel-Onboarding" aria-selected="false">Onboarding</button>
-          <button class="tab" role="tab" id="tab-Exec" aria-controls="panel-Exec" aria-selected="false">Exec</button>
-        </div>
-      </nav>
-    </header>
-
-    <!-- AE -->
-    <section id="panel-AE" role="tabpanel" aria-labelledby="tab-AE" class="tabpanel active">
-      <div class="shell panel">
-        <ul id="tree-AE" class="tree" role="tree" aria-label="AE dashboards"></ul>
-      </div>
-    </section>
-
-    <!-- SDR -->
-    <section id="panel-SDR" role="tabpanel" aria-labelledby="tab-SDR" class="tabpanel">
-      <div class="shell panel">
-        <ul id="tree-SDR" class="tree" role="tree" aria-label="SDR dashboards"></ul>
-      </div>
-    </section>
-
-    <!-- Onboarding -->
-    <section id="panel-Onboarding" role="tabpanel" aria-labelledby="tab-Onboarding" class="tabpanel">
-      <div class="shell panel">
-        <ul id="tree-Onboarding" class="tree" role="tree" aria-label="Onboarding dashboards"></ul>
-      </div>
-    </section>
-
-    <!-- Exec -->
-    <section id="panel-Exec" role="tabpanel" aria-labelledby="tab-Exec" class="tabpanel">
-      <div class="shell panel">
-        <ul id="tree-Exec" class="tree" role="tree" aria-label="Executive dashboards"></ul>
-      </div>
-    </section>
+<nav class="tabs panel" aria-label="Departments">
+  <div role="tablist" aria-orientation="horizontal" class="tablist">
+    <button class="tab" role="tab" id="tab-AE" aria-controls="panel-AE" aria-selected="true">AE</button>
+    <button class="tab" role="tab" id="tab-Onboarding" aria-controls="panel-Onboarding" aria-selected="false">Onboarding</button>
+    <button class="tab" role="tab" id="tab-Cancellations" aria-controls="panel-Cancellations" aria-selected="false">Cancellations</button>
+    <button class="tab" role="tab" id="tab-Sales" aria-controls="panel-Sales" aria-selected="false">Sales</button>
+    <button class="tab" role="tab" id="tab-SDR" aria-controls="panel-SDR" aria-selected="false">SDR</button>
+    <button class="tab" role="tab" id="tab-Support" aria-controls="panel-Support" aria-selected="false">Support</button>
+    <button class="tab" role="tab" id="tab-Exec" aria-controls="panel-Exec" aria-selected="false">Exec</button>
   </div>
+</nav>
 
+<section id="panel-AE" role="tabpanel" aria-labelledby="tab-AE" class="tabpanel active">
+  <div class="shell panel">
+    <ul id="tree-AE" class="tree" role="tree" aria-label="AE dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Onboarding" role="tabpanel" aria-labelledby="tab-Onboarding" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Onboarding" class="tree" role="tree" aria-label="Onboarding dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Cancellations" role="tabpanel" aria-labelledby="tab-Cancellations" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Cancellations" class="tree" role="tree" aria-label="Cancellations dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Sales" role="tabpanel" aria-labelledby="tab-Sales" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Sales" class="tree" role="tree" aria-label="Sales dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-SDR" role="tabpanel" aria-labelledby="tab-SDR" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-SDR" class="tree" role="tree" aria-label="SDR dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Support" role="tabpanel" aria-labelledby="tab-Support" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Support" class="tree" role="tree" aria-label="Support dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Exec" role="tabpanel" aria-labelledby="tab-Exec" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Exec" class="tree" role="tree" aria-label="Executive dashboards"></ul>
+  </div>
+</section>
+
+      
   <script>
   /*** Example data per department (replace with your real links) ***/
-  const DATA = {
-    AE: [
-      {
-        id: "ae-pipeline",
-        title: "Pipeline & Forecast",
-        url: "#",
-        children: [
-          { id: "ae-opp-health", title: "Opportunity Health", url: "#" },
-          { id: "ae-commit-coverage", title: "Commit Coverage", url: "#" },
-          {
-            id: "ae-activity",
-            title: "Activity",
-            children: [
-              { id: "ae-calls", title: "Calls & Meetings", url: "#" },
-              { id: "ae-emails", title: "Emails", url: "#" }
-            ]
-          }
-        ]
-      },
-      {
-        id: "ae-region",
-        title: "Regions",
-        children: [
-          { id: "ae-east", title: "East", url: "#" },
-          { id: "ae-west", title: "West", url: "#" }
-        ]
-      }
-    ],
-    SDR: [
-      {
-        id: "sdr-top",
-        title: "Top of Funnel",
-        children: [
-          { id: "sdr-sequences", title: "Sequences Performance", url: "#" },
-          { id: "sdr-response", title: "Reply & Connect Rates", url: "#" },
-          { id: "sdr-sourced", title: "SDR-Sourced Pipeline", url: "#" }
-        ]
-      },
-      {
-        id: "sdr-individual",
-        title: "Individual Dashboards",
-        children: [
-          { id: "sdr-alex", title: "Alex Rivera", url: "#" },
-          { id: "sdr-maya", title: "Maya Patel", url: "#" }
-        ]
-      }
-    ],
-    Onboarding: [
-      {
-        id: "onb-overview",
-        title: "Onboarding Overview",
-        children: [
-          { id: "onb-ttv", title: "Time-to-Value", url: "#" },
-          { id: "onb-milestones", title: "Milestone Completion", url: "#" }
-        ]
-      },
-      {
-        id: "onb-cohorts",
-        title: "Cohorts",
-        children: [
-          { id: "onb-q3", title: "Q3 Cohort", url: "#" },
-          { id: "onb-q4", title: "Q4 Cohort", url: "#" }
-        ]
-      }
-    ],
-    Exec: [
-      {
-        id: "exec-company",
-        title: "Company KPIs",
-        children: [
-          { id: "exec-arr", title: "ARR & Net Retention", url: "#" },
-          { id: "exec-gtm", title: "GTM Performance", url: "#" },
-          { id: "exec-csat", title: "CSAT / NPS", url: "#" }
-        ]
-      },
-      {
-        id: "exec-fin",
-        title: "Finance",
-        children: [
-          { id: "exec-pnl", title: "P&L Summary", url: "#" },
-          { id: "exec-cac", title: "CAC & Payback", url: "#" }
-        ]
-      }
-    ]
-  };
+const DATA = {
+  AE: [
+    {
+      id: "ae-kpis",
+      title: "KPIs",
+      children: [
+        { id: "ae-kpis-parker", title: "Parker", url: "#" },
+        { id: "ae-kpis-colton", title: "Colton", url: "#" },
+        { id: "ae-kpis-korth",  title: "Korth",  url: "#" }
+      ]
+    },
+    { id: "ae-general", title: "General", url: "#" }
+  ],
+
+  Onboarding: [
+    { id: "onb-daily",   title: "Daily",   url: "#" },
+    { id: "onb-weekly",  title: "Weekly",  url: "#" },
+    { id: "onb-monthly", title: "Monthly", url: "#" },
+    { id: "onb-ticket-pipeline-overview", title: "Ticket Pipeline Overview", url: "#" }
+  ],
+
+  Cancellations: [
+    // No sub-branches provided; keep as a single leaf for now.
+    { id: "cxl-overview", title: "Cancellations", url: "#" }
+  ],
+
+  Sales: [
+    { id: "sales-daily",   title: "Daily",   url: "#" },
+    { id: "sales-monthly", title: "Monthly", url: "#" },
+    { id: "sales-yearly",  title: "Yearly",  url: "#" }
+  ],
+
+  SDR: [
+    { id: "sdr-daily",   title: "Daily",   url: "#" },
+    { id: "sdr-monthly", title: "Monthly", url: "#" },
+    { id: "sdr-yearly",  title: "Yearly",  url: "#" }
+  ],
+
+  Support: [
+    { id: "support-email-overview", title: "Email Overview", url: "#" },
+    { id: "support-team",           title: "Team",           url: "#" },
+    { id: "support-ticket-pipeline",title: "Ticket Pipeline",url: "#" }
+  ],
+
+  Exec: [
+    { id: "exec-simple",  title: "Simple",  url: "#" },
+    { id: "exec-complex", title: "Complex", url: "#" },
+    { id: "exec-daily",   title: "Daily",   url: "#" },
+    { id: "exec-weekly",  title: "Weekly",  url: "#" },
+    { id: "exec-monthly", title: "Monthly", url: "#" }
+  ]
+};
 
   /*** Core tree rendering (reused per tab) ***/
   function isLeaf(node){ return !node.children || node.children.length === 0; }
@@ -346,9 +329,13 @@
 
   // map tree ULs
   treeEls["AE"] = document.getElementById("tree-AE");
-  treeEls["SDR"] = document.getElementById("tree-SDR");
   treeEls["Onboarding"] = document.getElementById("tree-Onboarding");
+  treeEls["Cancellations"] = document.getElementById("tree-Cancellations");
+  treeEls["Sales"] = document.getElementById("tree-Sales");
+  treeEls["SDR"] = document.getElementById("tree-SDR");
+  treeEls["Support"] = document.getElementById("tree-Support");
   treeEls["Exec"] = document.getElementById("tree-Exec");
+
 
   function loadOpen(tab){
     if (!openSets[tab]) {
