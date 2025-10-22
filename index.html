@@ -3,11 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dashboards Tree</title>
+<title>Company Dashboards</title>
 <style>
   /* --------- Design tokens --------- */
   :root{
-    /* Ensure UA controls don't auto-darken unpredictably */
     color-scheme: light dark;
 
     --radius: 12px;
@@ -30,9 +29,9 @@
     --hit: rgba(37,99,235,.12);
     --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
 
-    /* Icon-specific (new) */
-    --icon: #3f4b5f;       /* strong enough on light backgrounds */
-    --icon-muted: #6b7280; /* secondary iconography */
+    /* Icons */
+    --icon: #3f4b5f;
+    --icon-muted: #6b7280;
   }
   @media (prefers-color-scheme: dark){
     :root{
@@ -50,9 +49,8 @@
       --hit: rgba(96,165,250,.18);
       --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
 
-      /* Icon-specific (new) */
-      --icon: #d8dee9;       /* bright for contrast on dark panels */
-      --icon-muted: #aeb6c2; /* subtle but readable on dark */
+      --icon: #d8dee9;
+      --icon-muted: #aeb6c2;
     }
   }
 
@@ -67,11 +65,7 @@
     -webkit-font-smoothing: antialiased;
     line-height: 1.35;
   }
-
-  .app{
-    max-width: 980px;
-    margin: 0 auto;
-  }
+  .app{ max-width: 1100px; margin: 0 auto; }
 
   .panel{
     background: var(--panel);
@@ -83,50 +77,28 @@
 
   /* --------- Header / Controls --------- */
   header{
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    position: sticky; top: 0; z-index: 10;
     backdrop-filter: saturate(140%) blur(6px);
     background: color-mix(in hsl, var(--bg), transparent 40%);
     padding: 6px 0 14px;
   }
-
-  .toolbar{
-    display:flex; flex-wrap:wrap; align-items:center; gap: 10px;
-  }
-
-  .title{
-    font-weight: 700;
-    font-size: 18px;
-    margin-right: auto;
-    letter-spacing: .2px;
-  }
+  .toolbar{ display:flex; flex-wrap:wrap; align-items:center; gap: 10px; }
+  .title{ font-weight: 700; font-size: 18px; margin-right: auto; letter-spacing: .2px; }
 
   input[type="search"]{
-    appearance: none;
-    padding: 10px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--btn-border);
-    background: var(--panel);
-    min-width: 280px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-    color: var(--text);
+    appearance: none; padding: 10px 12px; border-radius: 999px;
+    border: 1px solid var(--btn-border); background: var(--panel); min-width: 280px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06); color: var(--text);
   }
   input[type="search"]::placeholder{ color: var(--muted-2); }
   input[type="search"]:focus-visible{
-    outline: none;
-    box-shadow: 0 0 0 var(--ring) var(--accent-soft);
+    outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft);
     border-color: color-mix(in srgb, var(--accent) 40%, var(--btn-border));
   }
 
   .btn{
-    padding: 9px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--btn-border);
-    background: var(--btn);
-    color: var(--text);
-    cursor: pointer;
-    line-height: 1;
+    padding: 9px 12px; border-radius: 10px; border: 1px solid var(--btn-border);
+    background: var(--btn); color: var(--text); cursor: pointer; line-height: 1;
     display:inline-flex; align-items:center; gap:8px;
     transition: background .15s ease, transform .04s ease;
   }
@@ -135,134 +107,86 @@
   .btn:focus-visible{ outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft); }
 
   .count{
-    color: var(--muted);
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: linear-gradient(to bottom, transparent, rgba(0,0,0,.02));
+    color: var(--muted); font-size: 12px; padding: 4px 8px; border-radius: 999px;
+    border: 1px solid var(--line); background: linear-gradient(to bottom, transparent, rgba(0,0,0,.02));
   }
+
+  /* --------- Tabs --------- */
+  .tabs{ margin-top: 12px; }
+  .tablist{
+    display:flex; gap:8px; padding:8px; border-bottom:1px solid var(--line); background: var(--panel);
+  }
+  .tab{
+    appearance:none; border:1px solid var(--btn-border); background: var(--btn);
+    padding:8px 12px; border-radius: 999px; cursor:pointer; color: var(--text);
+  }
+  .tab[aria-selected="true"]{
+    background: color-mix(in srgb, var(--accent) 8%, var(--btn));
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--btn-border));
+    box-shadow: 0 0 0 var(--ring) var(--accent-soft);
+  }
+  .tabpanel{ display:none; }
+  .tabpanel.active{ display:block; }
 
   /* --------- Tree --------- */
-  .tree{
-    list-style: none;
-    padding: 6px 8px 16px;
-    margin: 0;
-  }
+  .tree{ list-style: none; padding: 6px 8px 16px; margin: 0; }
   .node{ margin: 4px 0; }
-
   .row{
-    display:flex; align-items:center; gap: 8px;
-    padding: 6px 8px;
-    border-radius: 10px;
+    display:flex; align-items:center; gap: 8px; padding: 6px 8px; border-radius: 10px;
     transition: background .12s ease, outline-color .12s ease;
   }
   .row:hover{ background: var(--hover); }
   .row.hit{ background: var(--hit); }
 
   .toggle{
-    width: 1.6em; height: 1.6em;
-    display: inline-grid; place-items:center;
-    font-weight: 800;
-    border: 1px solid var(--btn-border);
-    border-radius: 8px;
-    background: var(--panel);
-    cursor: pointer;
-    line-height: 1;
-
-    /* New: make glyphs explicit, not inherited */
-    color: var(--icon);
-
-    /* Optional subtle size/weight bump for clarity */
-    font-size: 1rem;   /* 16px glyph inside 1.6em box */
-    font-weight: 900;
+    width: 1.6em; height: 1.6em; display: inline-grid; place-items:center;
+    border: 1px solid var(--btn-border); border-radius: 8px; background: var(--panel);
+    cursor: pointer; line-height: 1; color: var(--icon); font-size: 1rem; font-weight: 900;
   }
   .toggle:hover{ background: var(--hover); }
   .toggle.leaf { visibility: hidden; }
 
   .label{
-    display:inline-flex; align-items:center; gap:8px;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 500;
+    display:inline-flex; align-items:center; gap:8px; text-decoration: none;
+    color: var(--text); font-size: 14px; font-weight: 500;
   }
   .label:hover{ text-decoration: underline; text-underline-offset: 3px; }
   .label[target="_blank"]::after{
-    content: "↗";
-    font-size: 12px;
-
-    /* New: brighter, dedicated token so it doesn't fade in dark */
-    color: var(--icon-muted);
-
-    margin-left: 2px;
+    content: "↗"; font-size: 12px; color: var(--icon-muted); margin-left: 2px;
   }
 
   .badge{
-    margin-left: 4px;
-    font-size: 11px;
-    color: var(--muted);
-    padding: 2px 6px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: linear-gradient(to bottom, transparent, rgba(0,0,0,.02));
+    margin-left: 4px; font-size: 11px; color: var(--muted); padding: 2px 6px; border-radius: 999px;
+    border: 1px solid var(--line); background: linear-gradient(to bottom, transparent, rgba(0,0,0,.02));
   }
 
   .children{
-    margin-left: 22px;
-    padding-left: 12px;
-    border-left: 1px dashed var(--line);
-
-    /* micro-animation (non-blocking) */
-    opacity: 0;
-    transform: translateY(-2px);
+    margin-left: 22px; padding-left: 12px; border-left: 1px dashed var(--line);
+    opacity: 0; transform: translateY(-2px);
     transition: opacity .14s ease, transform .14s ease;
   }
-  .children.open{
-    opacity: 1;
-    transform: translateY(0);
-  }
+  .children.open{ opacity: 1; transform: translateY(0); }
 
   .hidden{ display: none !important; }
 
   /* Accessibility */
-  .row:focus-within{
-    outline: var(--ring) solid transparent;
-    box-shadow: 0 0 0 var(--ring) var(--accent-soft);
-  }
+  .row:focus-within{ outline: var(--ring) solid transparent; box-shadow: 0 0 0 var(--ring) var(--accent-soft); }
   .toggle:focus-visible{ outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft); }
   .label:focus-visible{ outline: none; box-shadow: 0 0 0 var(--ring) var(--accent-soft); border-radius: 8px; }
 
-  /* Container card for the tree */
-  .shell{
-    margin-top: 14px;
-  }
+  /* Container card for each tree */
+  .shell{ margin-top: 14px; }
 
-  /* Dark-mode border nudge so toggle boxes don't visually "sink" */
   @media (prefers-color-scheme: dark){
-    .toggle{
-      border-color: color-mix(in srgb, var(--btn-border) 80%, var(--text));
-    }
+    .toggle{ border-color: color-mix(in srgb, var(--btn-border) 80%, var(--text)); }
   }
-
-  /* Higher contrast preferences */
   @media (prefers-contrast: more){
     .toggle{ box-shadow: 0 0 0 2px var(--accent-soft) inset; }
     .label[target="_blank"]::after{ font-weight: 700; }
   }
-
-  /* Windows High Contrast / forced colors */
   @media (forced-colors: active){
-    .toggle{
-      forced-color-adjust: none;
-      color: ButtonText;
-      border-color: ButtonText;
-      background: Canvas;
-    }
-    .label[target="_blank"]::after{
-      forced-color-adjust: none;
-      color: ButtonText;
-    }
+    .toggle{ forced-color-adjust: none; color: ButtonText; border-color: ButtonText; background: Canvas; }
+    .label[target="_blank"]::after{ forced-color-adjust: none; color: ButtonText; }
   }
 </style>
 </head>
@@ -270,108 +194,177 @@
   <div class="app">
     <header>
       <div class="toolbar panel" style="padding:12px; gap:12px;">
-        <div class="title">Dashboards</div>
-        <input id="q" type="search" placeholder="Filter dashboards… (title)" aria-label="Filter dashboards" />
-        <button id="expand" type="button" class="btn" title="Expand all">Expand all</button>
-        <button id="collapse" type="button" class="btn" title="Collapse all">Collapse all</button>
+        <div class="title">Company Dashboards</div>
+        <input id="q" type="search" placeholder="Filter (active tab)…" aria-label="Filter dashboards in active department" />
+        <button id="expand" type="button" class="btn" title="Expand all in active tab">Expand all</button>
+        <button id="collapse" type="button" class="btn" title="Collapse all in active tab">Collapse all</button>
         <span class="count" id="count" aria-live="polite"></span>
       </div>
+
+      <nav class="tabs panel" aria-label="Departments">
+        <div role="tablist" aria-orientation="horizontal" class="tablist">
+          <button class="tab" role="tab" id="tab-AE" aria-controls="panel-AE" aria-selected="true">AE</button>
+          <button class="tab" role="tab" id="tab-SDR" aria-controls="panel-SDR" aria-selected="false">SDR</button>
+          <button class="tab" role="tab" id="tab-Onboarding" aria-controls="panel-Onboarding" aria-selected="false">Onboarding</button>
+          <button class="tab" role="tab" id="tab-Exec" aria-controls="panel-Exec" aria-selected="false">Exec</button>
+        </div>
+      </nav>
     </header>
 
-    <div class="shell panel">
-      <ul id="tree" class="tree" role="tree" aria-label="Dashboards tree"></ul>
-    </div>
+    <!-- AE -->
+    <section id="panel-AE" role="tabpanel" aria-labelledby="tab-AE" class="tabpanel active">
+      <div class="shell panel">
+        <ul id="tree-AE" class="tree" role="tree" aria-label="AE dashboards"></ul>
+      </div>
+    </section>
+
+    <!-- SDR -->
+    <section id="panel-SDR" role="tabpanel" aria-labelledby="tab-SDR" class="tabpanel">
+      <div class="shell panel">
+        <ul id="tree-SDR" class="tree" role="tree" aria-label="SDR dashboards"></ul>
+      </div>
+    </section>
+
+    <!-- Onboarding -->
+    <section id="panel-Onboarding" role="tabpanel" aria-labelledby="tab-Onboarding" class="tabpanel">
+      <div class="shell panel">
+        <ul id="tree-Onboarding" class="tree" role="tree" aria-label="Onboarding dashboards"></ul>
+      </div>
+    </section>
+
+    <!-- Exec -->
+    <section id="panel-Exec" role="tabpanel" aria-labelledby="tab-Exec" class="tabpanel">
+      <div class="shell panel">
+        <ul id="tree-Exec" class="tree" role="tree" aria-label="Executive dashboards"></ul>
+      </div>
+    </section>
   </div>
 
   <script>
-  /*** DATA (only the branches/links you specified) ***/
-  const data = [
-    {
-      id: "oct-2025",
-      title: "October Events",
-      url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137281602?appliedIlsFilters=JTdCJTIyMTM3MjgxNjAyJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFRoZSUyMFdlYWx0aHklMjBQbHVtYmVyJTIwSG9vcmFoJTIyJTJDJTIyMjAyNSUyMC0lMjBTeXN0ZW0lMjBGb3J3YXJkJTIyJTJDJTIyMjAyNSUyMC0lMjBMZW5ub3glMjBMaXZlJTIwUm9hZHNob3clMjIlMkMlMjIyMDI1JTIwLSUyMEdhcmFnZSUyMERvb3IlMjBGcmVlZG9tJTIwVmVydGljYWwlMjBUcmFjayUyMiUyQyUyMjIwMjUlMjAtJTIwTGVnYWN5JTIwQW5udWFsJTIwT2Zmc2l0ZSUyMiUyQyUyMjIwMjUlMjAtJTIwSG9tZSUyMGFuZCUyMENvbW1lcmNpYWwlMjBTZXJ2aWNlcyUyME1hcmtldGluZyUyMFN1bW1pdCUyMiUyQyUyMjIwMjUlMjAtJTIwTnV2ZSUyME5ldHdvcmtzJTIwVG91ciUyMiUyQyUyMjIwMjUlMjAtJTIwQ2xvdmVyJTIwTWFzdGVybWluZCUyMiUyQyUyMjIwMjUlMjAtJTIwWm9vbSUyMERyYWluJTIwRXhwbyUyMiUyQyUyMjIwMjUlMjAtJTIwU2VydmljZSUyMFdvcmxkJTIyJTJDJTIyMjAyNSUyMC0lMjBOZXR3b3JrJTIwU1QlMjBFdmVudCUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D",
-      children: [
-        {
-          id: "oct-system-forward-pro-boot-camp",
-          title: "System Forward Pro Boot Camp",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261328?appliedIlsFilters=JTdCJTIyMTM3MjYxMzI4JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFN5c3RlbSUyMEZvcndhcmQlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        { id: "oct-lennox-live-roadshow", title: "Lennox Live Roadshow" },
-        { id: "oct-wealthy-plumber", title: "The Wealthy Plumber", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137143993" },
-        {
-          id: "oct-garage-door-freedom",
-          title: "Garage Door Freedom",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261375?appliedIlsFilters=JTdCJTIyMTM3MjYxMzc1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMEdhcmFnZSUyMERvb3IlMjBGcmVlZG9tJTIwVmVydGljYWwlMjBUcmFjayUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D"
-        },
-        {
-          id: "oct-legacy-offsite",
-          title: "Legacy Annual Offsite",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261436?appliedIlsFilters=JTdCJTIyMTM3MjYxNDM2JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMExlZ2FjeSUyMEFubnVhbCUyME9mZnNpdGUlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-home-commercial-summit",
-          title: "Home and Commercial Services Marketing Summit",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261525?appliedIlsFilters=JTdCJTIyMTM3MjYxNTI1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMEhvbWUlMjBhbmQlMjBDb21tZXJjaWFsJTIwU2VydmljZXMlMjBNYXJrZXRpbmclMjBTdW1taXQlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-nuve-networks-tour",
-          title: "Nuve Networks Tour",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261580?appliedIlsFilters=JTdCJTIyMTM3MjYxNTgwJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyME51dmUlMjBOZXR3b3JrcyUyMFRvdXIlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-clover-mastermind",
-          title: "Clover Mastermind",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261616?appliedIlsFilters=JTdCJTIyMTM3MjYxNjE2JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMENsb3ZlciUyME1hc3Rlcm1pbmQlMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-zoom-drain-expo",
-          title: "Zoom Drain Expo - Vortex",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137261632?appliedIlsFilters=JTdCJTIyMTM3MjYxNjMyJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFpvb20lMjBEcmFpbiUyMEV4cG8lMjIlNUQlN0QlN0QlNUQlMkMlMjJkYXRhU291cmNlTmFtZSUyMiUzQSUyMkRFQUwlMjIlN0QlN0QlN0Q%3D"
-        },
-        {
-          id: "oct-service-world",
-          title: "Service World",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137281465?appliedIlsFilters=JTdCJTIyMTM3MjgxNDY1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFNlcnZpY2UlMjBXb3JsZCUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D"
-        },
-        {
-          id: "oct-network-st",
-          title: "Network ST event",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137281465?appliedIlsFilters=JTdCJTIyMTM3MjgxNDY1JTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFNlcnZpY2UlMjBXb3JsZCUyMiU1RCU3RCU3RCU1RCUyQyUyMmRhdGFTb3VyY2VOYW1lJTIyJTNBJTIyREVBTCUyMiU3RCU3RCU3RA%3D%3D"
-        }
-      ]
-    },
-    {
-      id: "sep-2025",
-      title: "September Events",
-      url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137085472",
-      children: [
-        {
-          id: "sep-huge-convention",
-          title: "The HUGE Convention",
-          url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137054631?appliedIlsFilters=JTdCJTIyMTM3MDU0NjMxJTIyJTNBJTdCJTIyMC0zJTIyJTNBJTdCJTIyZmlsdGVycyUyMiUzQSU1QiU3QiUyMnByb3BlcnR5TmFtZSUyMiUzQSUyMnN1Yl9sZWFkX3NvdXJjZSUyMiUyQyUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZSUyMiUzQSU3QiUyMnByb3BlcnR5VHlwZSUyMiUzQSUyMmVudW1lcmF0aW9uJTIyJTJDJTIyb3BlcmF0b3IlMjIlM0ElMjJJU19BTllfT0YlMjIlMkMlMjJ2YWx1ZXMlMjIlM0ElNUIlMjIyMDI1JTIwLSUyMFRoZSUyMEh1Z2UlMjBDb252ZW50aW9uJTIyJTVEJTdEJTdEJTVEJTJDJTIyZGF0YVNvdXJjZU5hbWUlMjIlM0ElMjJERUFMJTIyJTdEJTdEJTdE"
-        },
-        { id: "sep-home-service-freedom", title: "Home Service Freedom", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137043392" },
-        { id: "sep-pantheon", title: "Pantheon", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137054779" },
-        { id: "sep-certain-path", title: "Certain Path Fall Expo \"Partner Jam\"", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137242704" },
-        { id: "sep-nexstar", title: "Nexstar Super Meeting", url: "https://app-na2.hubspot.com/reports-dashboard/23947290/view/137094368" }
-      ]
-    }
-  ];
+  /*** Example data per department (replace with your real links) ***/
+  const DATA = {
+    AE: [
+      {
+        id: "ae-pipeline",
+        title: "Pipeline & Forecast",
+        url: "#",
+        children: [
+          { id: "ae-opp-health", title: "Opportunity Health", url: "#" },
+          { id: "ae-commit-coverage", title: "Commit Coverage", url: "#" },
+          {
+            id: "ae-activity",
+            title: "Activity",
+            children: [
+              { id: "ae-calls", title: "Calls & Meetings", url: "#" },
+              { id: "ae-emails", title: "Emails", url: "#" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "ae-region",
+        title: "Regions",
+        children: [
+          { id: "ae-east", title: "East", url: "#" },
+          { id: "ae-west", title: "West", url: "#" }
+        ]
+      }
+    ],
+    SDR: [
+      {
+        id: "sdr-top",
+        title: "Top of Funnel",
+        children: [
+          { id: "sdr-sequences", title: "Sequences Performance", url: "#" },
+          { id: "sdr-response", title: "Reply & Connect Rates", url: "#" },
+          { id: "sdr-sourced", title: "SDR-Sourced Pipeline", url: "#" }
+        ]
+      },
+      {
+        id: "sdr-individual",
+        title: "Individual Dashboards",
+        children: [
+          { id: "sdr-alex", title: "Alex Rivera", url: "#" },
+          { id: "sdr-maya", title: "Maya Patel", url: "#" }
+        ]
+      }
+    ],
+    Onboarding: [
+      {
+        id: "onb-overview",
+        title: "Onboarding Overview",
+        children: [
+          { id: "onb-ttv", title: "Time-to-Value", url: "#" },
+          { id: "onb-milestones", title: "Milestone Completion", url: "#" }
+        ]
+      },
+      {
+        id: "onb-cohorts",
+        title: "Cohorts",
+        children: [
+          { id: "onb-q3", title: "Q3 Cohort", url: "#" },
+          { id: "onb-q4", title: "Q4 Cohort", url: "#" }
+        ]
+      }
+    ],
+    Exec: [
+      {
+        id: "exec-company",
+        title: "Company KPIs",
+        children: [
+          { id: "exec-arr", title: "ARR & Net Retention", url: "#" },
+          { id: "exec-gtm", title: "GTM Performance", url: "#" },
+          { id: "exec-csat", title: "CSAT / NPS", url: "#" }
+        ]
+      },
+      {
+        id: "exec-fin",
+        title: "Finance",
+        children: [
+          { id: "exec-pnl", title: "P&L Summary", url: "#" },
+          { id: "exec-cac", title: "CAC & Payback", url: "#" }
+        ]
+      }
+    ]
+  };
 
-  /*** CORE TREE (same behavior) ***/
-  const treeEl = document.getElementById("tree");
+  /*** Core tree rendering (reused per tab) ***/
+  function isLeaf(node){ return !node.children || node.children.length === 0; }
+  function leafCount(node){ if (isLeaf(node)) return 1; return (node.children||[]).reduce((s,c)=>s+leafCount(c),0); }
+  function flatten(nodes, arr = []){ for (const n of nodes){ arr.push(n); if (n.children) flatten(n.children, arr); } return arr; }
+
+  /*** Per-tab state ***/
   const qEl = document.getElementById("q");
   const countEl = document.getElementById("count");
-  const OPEN_KEY = "dash_tree_open_ids_v1";
+  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+  const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+  const OPEN_KEY_PREFIX = "dept_tree_open_ids_v1_"; // suffixed per tab
+  let activeTab = "AE";
+  let openSets = {}; // tabId -> Set of open node ids
+  let treeEls = {};  // tabId -> UL element
+  let dataByTab = DATA;
 
-  let openSet = new Set(JSON.parse(localStorage.getItem(OPEN_KEY) || "[]"));
-  function saveOpen() { localStorage.setItem(OPEN_KEY, JSON.stringify([...openSet])); }
-  function isLeaf(node) { return !node.children || node.children.length === 0; }
-  function leafCount(node){ if (isLeaf(node)) return 1; return (node.children||[]).reduce((s,c)=>s+leafCount(c),0); }
+  // map tree ULs
+  treeEls["AE"] = document.getElementById("tree-AE");
+  treeEls["SDR"] = document.getElementById("tree-SDR");
+  treeEls["Onboarding"] = document.getElementById("tree-Onboarding");
+  treeEls["Exec"] = document.getElementById("tree-Exec");
 
-  function render(nodes, parentEl) {
+  function loadOpen(tab){
+    if (!openSets[tab]) {
+      const raw = localStorage.getItem(OPEN_KEY_PREFIX + tab) || "[]";
+      openSets[tab] = new Set(JSON.parse(raw));
+    }
+    return openSets[tab];
+  }
+  function saveOpen(tab){
+    localStorage.setItem(OPEN_KEY_PREFIX + tab, JSON.stringify([...openSets[tab]]));
+  }
+
+  function render(nodes, parentEl, tab){
     parentEl.innerHTML = "";
     let totalLeaves = 0;
+    const openSet = loadOpen(tab);
 
     for (const node of nodes) {
       const li = document.createElement("li");
@@ -388,7 +381,7 @@
       tog.type = "button";
       tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
       tog.textContent = openSet.has(node.id) ? "▾" : "▸";
-      tog.addEventListener("click", () => toggleNode(node.id, li));
+      tog.addEventListener("click", () => toggleNode(node.id, li, tab));
       row.appendChild(tog);
 
       const label = document.createElement(node.url ? "a" : "span");
@@ -414,7 +407,7 @@
         children.className = "children" + (isOpen ? " open" : " hidden");
         children.setAttribute("role", "group");
         li.appendChild(children);
-        totalLeaves += render(node.children, children);
+        totalLeaves += render(node.children, children, tab);
       } else {
         totalLeaves += 1;
       }
@@ -422,25 +415,27 @@
     return totalLeaves;
   }
 
-  function toggleNode(id, liEl) {
-    if (!liEl.querySelector(":scope > .children")) return;
-    const isOpen = openSet.has(id);
+  function toggleNode(id, liEl, tab){
     const children = liEl.querySelector(":scope > .children");
+    if (!children) return;
+    const openSet = loadOpen(tab);
+    const isOpen = openSet.has(id);
     const btn = liEl.querySelector(":scope > .row .toggle");
     if (isOpen) openSet.delete(id); else openSet.add(id);
-    saveOpen();
+    saveOpen(tab);
     btn.textContent = isOpen ? "▸" : "▾";
     liEl.setAttribute("aria-expanded", !isOpen);
     if (isOpen){ children.classList.remove("open"); children.classList.add("hidden"); }
     else { children.classList.remove("hidden"); void children.offsetWidth; children.classList.add("open"); }
   }
 
-  function flatten(nodes, arr=[]) { for (const n of nodes){ arr.push(n); if (n.children) flatten(n.children, arr); } return arr; }
+  function filterActiveTree(query){
+    const treeEl = treeEls[activeTab];
+    const data = dataByTab[activeTab];
+    const openSet = loadOpen(activeTab);
 
-  function filterTree(query) {
-    query = (query || "").trim().toLowerCase();
-    treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
-    if (!query) {
+    function fullReset(){
+      treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
       treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
       treeEl.querySelectorAll(".node").forEach(n => {
         const id = n.dataset.id;
@@ -454,25 +449,29 @@
           n.setAttribute("aria-expanded", open);
         }
       });
-      return;
     }
+
+    query = (query || "").trim().toLowerCase();
+    if (!query){ fullReset(); return; }
+
+    treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
     const all = flatten(data);
     const hits = new Set(all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id));
 
-    function markVisibility(node) {
+    function markVisibility(node){
       const selfHit = hits.has(node.id);
       let childVisible = false;
       (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
       const visible = selfHit || childVisible;
 
       const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
-      if (el) {
+      if (el){
         el.classList.toggle("hidden", !visible);
         const row = el.querySelector(":scope > .row");
         if (visible && row) row.classList.add("hit");
         const children = el.querySelector(":scope > .children");
         const tog = el.querySelector(":scope > .row .toggle");
-        if (children && tog) {
+        if (children && tog){
           children.classList.toggle("hidden", !childVisible);
           children.classList.toggle("open", childVisible);
           tog.textContent = childVisible ? "▾" : "▸";
@@ -484,33 +483,68 @@
     data.forEach(root => markVisibility(root));
   }
 
-  /*** INIT + CONTROLS ***/
-  const leaves = render(data, treeEl);
-  countEl.textContent = `Dashboards: ${leaves}`;
+  function renderActive(){
+    const treeEl = treeEls[activeTab];
+    const data = dataByTab[activeTab];
+    const leaves = render(data, treeEl, activeTab);
+    document.getElementById("count").textContent = `${activeTab} dashboards: ${leaves}`;
+  }
 
+  function switchTab(toId){
+    if (toId === activeTab) return;
+    // update tabs/panels aria + classes
+    tabs.forEach(t => t.setAttribute("aria-selected", String(t.id === "tab-" + toId)));
+    panels.forEach(p => p.classList.toggle("active", p.id === "panel-" + toId));
+    activeTab = toId;
+    renderActive();
+    filterActiveTree(qEl.value);
+    // reflect in URL (non-destructive)
+    const url = new URL(location.href);
+    url.searchParams.set("tab", activeTab);
+    history.replaceState({}, "", url);
+  }
+
+  // Init: render all once for faster tab switching
+  Object.keys(treeEls).forEach(tabId => {
+    render(dataByTab[tabId], treeEls[tabId], tabId);
+  });
+  renderActive();
+
+  // Controls apply to active tab
   document.getElementById("expand").addEventListener("click", () => {
-    const ids = flatten(data).filter(n => !isLeaf(n)).map(n => n.id);
-    openSet = new Set(ids); saveOpen();
-    treeEl.querySelectorAll(".children").forEach(ul => { ul.classList.remove("hidden"); void ul.offsetWidth; ul.classList.add("open"); });
-    treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▾");
-    treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", true));
+    const all = flatten(dataByTab[activeTab]);
+    openSets[activeTab] = new Set(all.filter(n => !isLeaf(n)).map(n => n.id));
+    saveOpen(activeTab);
+    filterActiveTree(qEl.value); // will open everything respecting filter
   });
 
   document.getElementById("collapse").addEventListener("click", () => {
-    openSet = new Set(); saveOpen();
-    treeEl.querySelectorAll(".children").forEach(ul => { ul.classList.remove("open"); ul.classList.add("hidden"); });
-    treeEl.querySelectorAll(".row .toggle:not(.leaf)").forEach(b => b.textContent = "▸");
-    treeEl.querySelectorAll(".node").forEach(n => n.setAttribute("aria-expanded", false));
+    openSets[activeTab] = new Set();
+    saveOpen(activeTab);
+    filterActiveTree(qEl.value); // will close everything
   });
 
-  qEl.addEventListener("input", () => filterTree(qEl.value));
+  qEl.addEventListener("input", () => filterActiveTree(qEl.value));
 
-  /*** Optional deep-links: ?q=foo&open=oct-2025/sep-2025 ***/
+  // Tab click
+  tabs.forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.id.replace("tab-","")));
+  });
+
+  // Deep links: ?tab=AE&q=foo
   const params = new URLSearchParams(location.search);
-  if (params.get("open")) { params.get("open").split("/").forEach(id => openSet.add(id)); saveOpen(); }
-  if (params.get("q")) { qEl.value = params.get("q"); }
-  filterTree(qEl.value || "");
+  const initialTab = params.get("tab");
+  if (initialTab && treeEls[initialTab]) {
+    // flip ARIA/UI then render/filter
+    tabs.forEach(t => t.setAttribute("aria-selected", "false"));
+    document.getElementById("tab-" + initialTab)?.setAttribute("aria-selected","true");
+    panels.forEach(p => p.classList.remove("active"));
+    document.getElementById("panel-" + initialTab)?.classList.add("active");
+    activeTab = initialTab;
+  }
+  if (params.get("q")) qEl.value = params.get("q");
+  renderActive();
+  filterActiveTree(qEl.value || "");
   </script>
-
 </body>
 </html>
