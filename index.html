@@ -203,58 +203,21 @@
 
 <nav class="tabs panel" aria-label="Departments">
   <div role="tablist" aria-orientation="horizontal" class="tablist">
-    <button class="tab" role="tab" id="tab-AE" aria-controls="panel-AE" aria-selected="true">AE</button>
-    <button class="tab" role="tab" id="tab-Onboarding" aria-controls="panel-Onboarding" aria-selected="false">Onboarding</button>
-    <button class="tab" role="tab" id="tab-Cancellations" aria-controls="panel-Cancellations" aria-selected="false">Cancellations</button>
-    <button class="tab" role="tab" id="tab-Sales" aria-controls="panel-Sales" aria-selected="false">Sales</button>
-    <button class="tab" role="tab" id="tab-SDR" aria-controls="panel-SDR" aria-selected="false">SDR</button>
-    <button class="tab" role="tab" id="tab-Support" aria-controls="panel-Support" aria-selected="false">Support</button>
-    <button class="tab" role="tab" id="tab-Exec" aria-controls="panel-Exec" aria-selected="false">Exec</button>
+    <button class="tab" role="tab" id="tab-SDR" aria-controls="panel-SDR" aria-selected="true">SDR</button>
     <button class="tab" role="tab" id="tab-Events" aria-controls="panel-Events" aria-selected="false">Events</button>
-
+    <button class="tab" role="tab" id="tab-Sales" aria-controls="panel-Sales" aria-selected="false">Sales</button>
+    <button class="tab" role="tab" id="tab-Cancelations" aria-controls="panel-Cancelations" aria-selected="false">Cancelations</button>
+    <button class="tab" role="tab" id="tab-Partnerships" aria-controls="panel-Partnerships" aria-selected="false">Partnerships</button>
+    <button class="tab" role="tab" id="tab-Executive" aria-controls="panel-Executive" aria-selected="false">Executive</button>
+    <button class="tab" role="tab" id="tab-Onboarding" aria-controls="panel-Onboarding" aria-selected="false">Onboarding</button>
+    <button class="tab" role="tab" id="tab-Support" aria-controls="panel-Support" aria-selected="false">Support</button>
   </div>
 </nav>
 </header>
-    
-<section id="panel-AE" role="tabpanel" aria-labelledby="tab-AE" class="tabpanel active">
-  <div class="shell panel">
-    <ul id="tree-AE" class="tree" role="tree" aria-label="AE dashboards"></ul>
-  </div>
-</section>
 
-<section id="panel-Onboarding" role="tabpanel" aria-labelledby="tab-Onboarding" class="tabpanel">
-  <div class="shell panel">
-    <ul id="tree-Onboarding" class="tree" role="tree" aria-label="Onboarding dashboards"></ul>
-  </div>
-</section>
-
-<section id="panel-Cancellations" role="tabpanel" aria-labelledby="tab-Cancellations" class="tabpanel">
-  <div class="shell panel">
-    <ul id="tree-Cancellations" class="tree" role="tree" aria-label="Cancellations dashboards"></ul>
-  </div>
-</section>
-
-<section id="panel-Sales" role="tabpanel" aria-labelledby="tab-Sales" class="tabpanel">
-  <div class="shell panel">
-    <ul id="tree-Sales" class="tree" role="tree" aria-label="Sales dashboards"></ul>
-  </div>
-</section>
-
-<section id="panel-SDR" role="tabpanel" aria-labelledby="tab-SDR" class="tabpanel">
+<section id="panel-SDR" role="tabpanel" aria-labelledby="tab-SDR" class="tabpanel active">
   <div class="shell panel">
     <ul id="tree-SDR" class="tree" role="tree" aria-label="SDR dashboards"></ul>
-  </div>
-</section>
-
-<section id="panel-Support" role="tabpanel" aria-labelledby="tab-Support" class="tabpanel">
-  <div class="shell panel">
-    <ul id="tree-Support" class="tree" role="tree" aria-label="Support dashboards"></ul>
-  </div>
-</section>
-
-<section id="panel-Exec" role="tabpanel" aria-labelledby="tab-Exec" class="tabpanel">
-  <div class="shell panel">
-    <ul id="tree-Exec" class="tree" role="tree" aria-label="Executive dashboards"></ul>
   </div>
 </section>
 
@@ -264,307 +227,382 @@
   </div>
 </section>
 
-</div>      
-  <script>
-  /*** Example data per department (replace with your real links) ***/
+<section id="panel-Sales" role="tabpanel" aria-labelledby="tab-Sales" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Sales" class="tree" role="tree" aria-label="Sales dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Cancelations" role="tabpanel" aria-labelledby="tab-Cancelations" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Cancelations" class="tree" role="tree" aria-label="Cancelations dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Partnerships" role="tabpanel" aria-labelledby="tab-Partnerships" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Partnerships" class="tree" role="tree" aria-label="Partnerships dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Executive" role="tabpanel" aria-labelledby="tab-Executive" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Executive" class="tree" role="tree" aria-label="Executive dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Onboarding" role="tabpanel" aria-labelledby="tab-Onboarding" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Onboarding" class="tree" role="tree" aria-label="Onboarding dashboards"></ul>
+  </div>
+</section>
+
+<section id="panel-Support" role="tabpanel" aria-labelledby="tab-Support" class="tabpanel">
+  <div class="shell panel">
+    <ul id="tree-Support" class="tree" role="tree" aria-label="Support dashboards"></ul>
+  </div>
+</section>
+
+</div>
+<script>
+/*** Structure-only update per your spec ***/
 const DATA = {
-  AE: [
+  SDR: [
     {
-      id: "ae-kpis",
-      title: "KPIs",
+      id: "sdr-kpi",
+      title: "SDR KPI",
       children: [
-        { id: "ae-kpis-parker", title: "Parker", url: "#" },
-        { id: "ae-kpis-colton", title: "Colton", url: "#" },
-        { id: "ae-kpis-korth",  title: "Korth",  url: "#" }
+        { id: "sdr-kpi-overview", title: "Overview", url: "#" },
+        { id: "sdr-kpi-ky",       title: "Ky",       url: "#" },
+        { id: "sdr-kpi-stan",     title: "Stan",     url: "#" },
+        { id: "sdr-kpi-jaredw",   title: "Jared W",  url: "#" }
       ]
     },
-    { id: "ae-general", title: "General", url: "#" }
-  ],
-
-  Onboarding: [
-    { id: "onb-daily",   title: "Daily",   url: "#" },
-    { id: "onb-weekly",  title: "Weekly",  url: "#" },
-    { id: "onb-monthly", title: "Monthly", url: "#" },
-    { id: "onb-ticket-pipeline-overview", title: "Ticket Pipeline Overview", url: "#" }
-  ],
-
-  Cancellations: [
-    // No sub-branches provided; keep as a single leaf for now.
-    { id: "cxl-overview", title: "Cancellations", url: "#" }
-  ],
-
-  Sales: [
-    { id: "sales-daily",   title: "Daily",   url: "#" },
-    { id: "sales-monthly", title: "Monthly", url: "#" },
-    { id: "sales-yearly",  title: "Yearly",  url: "#" }
-  ],
-
-  SDR: [
-    { id: "sdr-daily",   title: "Daily",   url: "#" },
-    { id: "sdr-monthly", title: "Monthly", url: "#" },
-    { id: "sdr-yearly",  title: "Yearly",  url: "#" }
-  ],
-
-  Support: [
-    { id: "support-email-overview", title: "Email Overview", url: "#" },
-    { id: "support-team",           title: "Team",           url: "#" },
-    { id: "support-ticket-pipeline",title: "Ticket Pipeline",url: "#" }
-  ],
-
-  Exec: [
-    { id: "exec-simple",  title: "Simple",  url: "#" },
-    { id: "exec-complex", title: "Complex", url: "#" },
-    { id: "exec-daily",   title: "Daily",   url: "#" },
-    { id: "exec-weekly",  title: "Weekly",  url: "#" },
-    { id: "exec-monthly", title: "Monthly", url: "#" }
+    {
+      id: "sdr",
+      title: "SDR",
+      children: [
+        { id: "sdr-yearly",  title: "Yearly",  url: "#" },
+        { id: "sdr-monthly", title: "Monthly", url: "#" },
+        { id: "sdr-daily",   title: "Daily",   url: "#" }
+      ]
+    }
   ],
 
   Events: [
-  {
-    id: "events-2025-oct",
-    title: "October 2025",
-    children: [
-      { id: "evt-25-oct-wealthy-plumber", title: "The Wealthy Plumber", url: "#" },
-      { id: "evt-25-oct-garage-door-freedom", title: "Garage Door Freedom", url: "#" },
-      { id: "evt-25-oct-service-world", title: "Service World", url: "#" }
-    ]
-  },
-  {
-    id: "events-2025-sep",
-    title: "September 2025",
-    children: [
-      { id: "evt-25-sep-huge-convention", title: "The HUGE Convention", url: "#" },
-      { id: "evt-25-sep-home-service-freedom", title: "Home Service Freedom", url: "#" },
-      { id: "evt-25-sep-pantheon", title: "Pantheon", url: "#" }
-    ]
-  }
-]
+    {
+      id: "events-october",
+      title: "October",
+      children: [
+        { id: "events-october-overview",              title: "October",                         url: "#" },
+        { id: "events-wealthy-plumber-hoorah",        title: "Wealthy Plumber HOORAH",          url: "#" },
+        { id: "events-system-forward-pro-bootcamp",   title: "System Forward Pro Boot Camp",    url: "#" },
+        { id: "events-lennox-live-roadshow",          title: "Lennox Live Roadshow",            url: "#" },
+        { id: "events-gdf-vertical-track",            title: "GDF Vertical Track",              url: "#" },
+        { id: "events-legacy-annual-offsite",         title: "Legacy Annual Offsite",           url: "#" },
+        { id: "events-nuve-networks-tour",            title: "Nuve Networks Tour",              url: "#" },
+        { id: "events-clover-mastermind",             title: "Clover Mastermind",               url: "#" },
+        { id: "events-zoom-drain-expo",               title: "Zoom Drain Expo",                 url: "#" },
+        { id: "events-service-world",                 title: "Service World",                   url: "#" },
+        { id: "events-network-st-event",              title: "Network ST event",                url: "#" }
+      ]
+    },
+    {
+      id: "events-september",
+      title: "September",
+      children: [
+        { id: "events-september-overview",            title: "September",                       url: "#" },
+        { id: "events-home-service-freedom",          title: "Home Service Freedom",            url: "#" },
+        { id: "events-pantheon",                      title: "Pantheon",                        url: "#" },
+        { id: "events-certain-path-fall-expo",        title: "Certain Path Fall Expo \"Partner Jam\"", url: "#" },
+        { id: "events-nexstar-super-meeting",         title: "Nexstar Super Meeting",           url: "#" }
+      ]
+    }
+  ],
 
+  Sales: [
+    {
+      id: "sales-overview",
+      title: "Overview",
+      children: [
+        { id: "sales-overview-yearly",  title: "Yearly",  url: "#" },
+        { id: "sales-overview-monthly", title: "Monthly", url: "#" },
+        { id: "sales-overview-weekly",  title: "Weekly",  url: "#" }
+      ]
+    },
+    {
+      id: "sales-kpis",
+      title: "KPI's",
+      children: [
+        { id: "sales-kpis-overview", title: "Overview", url: "#" },
+        { id: "sales-kpis-parker",   title: "Parker",   url: "#" },
+        { id: "sales-kpis-colton",   title: "Colton",   url: "#" },
+        { id: "sales-kpis-korth",    title: "Korth",    url: "#" },
+        { id: "sales-kpis-ky",       title: "Ky",       url: "#" }
+      ]
+    }
+  ],
+
+  Cancelations: [
+    {
+      id: "cancelations-overview",
+      title: "Overview",
+      url: "#"
+    }
+  ],
+
+  Partnerships: [
+    {
+      id: "partnerships-team",
+      title: "team",
+      url: "#"
+    }
+  ],
+
+  Executive: [
+    { id: "executive-overview", title: "Overview", url: "#" },
+    { id: "executive-monthly",  title: "Monthly",  url: "#" },
+    { id: "executive-weekly",   title: "Weekly",   url: "#" }
+  ],
+
+  Onboarding: [
+    {
+      id: "onboarding-ticket-pipeline",
+      title: "Ticket Pipeline",
+      children: [
+        { id: "onboarding-ticket-yearly",  title: "Yearly",  url: "#" },
+        { id: "onboarding-ticket-monthly", title: "Monthly", url: "#" },
+        { id: "onboarding-ticket-weekly",  title: "Weekly",  url: "#" }
+      ]
+    }
+  ],
+
+  Support: [
+    { id: "support-overview", title: "Overview", url: "#" }
+  ]
 };
 
-  /*** Core tree rendering (reused per tab) ***/
-  function isLeaf(node){ return !node.children || node.children.length === 0; }
-  function leafCount(node){ if (isLeaf(node)) return 1; return (node.children||[]).reduce((s,c)=>s+leafCount(c),0); }
-  function flatten(nodes, arr = []){ for (const n of nodes){ arr.push(n); if (n.children) flatten(n.children, arr); } return arr; }
+/*** Core tree rendering (unchanged) ***/
+function isLeaf(node){ return !node.children || node.children.length === 0; }
+function leafCount(node){ if (isLeaf(node)) return 1; return (node.children||[]).reduce((s,c)=>s+leafCount(c),0); }
+function flatten(nodes, arr = []){ for (const n of nodes){ arr.push(n); if (n.children) flatten(n.children, arr); } return arr; }
 
-  /*** Per-tab state ***/
-  const qEl = document.getElementById("q");
-  const countEl = document.getElementById("count");
-  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
-  const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
-  const OPEN_KEY_PREFIX = "dept_tree_open_ids_v1_"; // suffixed per tab
-  let activeTab = "AE";
-  let openSets = {}; // tabId -> Set of open node ids
-  let treeEls = {};  // tabId -> UL element
-  let dataByTab = DATA;
+/*** Per-tab state ***/
+const qEl = document.getElementById("q");
+const countEl = document.getElementById("count");
+const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+const OPEN_KEY_PREFIX = "dept_tree_open_ids_v1_"; // suffixed per tab
+let activeTab = "SDR";
+let openSets = {}; // tabId -> Set of open node ids
+let treeEls = {};  // tabId -> UL element
+let dataByTab = DATA;
 
-  // map tree ULs
-  treeEls["AE"] = document.getElementById("tree-AE");
-  treeEls["Onboarding"] = document.getElementById("tree-Onboarding");
-  treeEls["Cancellations"] = document.getElementById("tree-Cancellations");
-  treeEls["Sales"] = document.getElementById("tree-Sales");
-  treeEls["SDR"] = document.getElementById("tree-SDR");
-  treeEls["Support"] = document.getElementById("tree-Support");
-  treeEls["Exec"] = document.getElementById("tree-Exec");
-  treeEls["Events"] = document.getElementById("tree-Events");
+// map tree ULs
+treeEls["SDR"] = document.getElementById("tree-SDR");
+treeEls["Events"] = document.getElementById("tree-Events");
+treeEls["Sales"] = document.getElementById("tree-Sales");
+treeEls["Cancelations"] = document.getElementById("tree-Cancelations");
+treeEls["Partnerships"] = document.getElementById("tree-Partnerships");
+treeEls["Executive"] = document.getElementById("tree-Executive");
+treeEls["Onboarding"] = document.getElementById("tree-Onboarding");
+treeEls["Support"] = document.getElementById("tree-Support");
 
-
-
-  function loadOpen(tab){
-    if (!openSets[tab]) {
-      const raw = localStorage.getItem(OPEN_KEY_PREFIX + tab) || "[]";
-      openSets[tab] = new Set(JSON.parse(raw));
-    }
-    return openSets[tab];
+function loadOpen(tab){
+  if (!openSets[tab]) {
+    const raw = localStorage.getItem(OPEN_KEY_PREFIX + tab) || "[]";
+    openSets[tab] = new Set(JSON.parse(raw));
   }
-  function saveOpen(tab){
-    localStorage.setItem(OPEN_KEY_PREFIX + tab, JSON.stringify([...openSets[tab]]));
-  }
+  return openSets[tab];
+}
+function saveOpen(tab){
+  localStorage.setItem(OPEN_KEY_PREFIX + tab, JSON.stringify([...openSets[tab]]));
+}
 
-  function render(nodes, parentEl, tab){
-    parentEl.innerHTML = "";
-    let totalLeaves = 0;
-    const openSet = loadOpen(tab);
+function render(nodes, parentEl, tab){
+  parentEl.innerHTML = "";
+  let totalLeaves = 0;
+  const openSet = loadOpen(tab);
 
-    for (const node of nodes) {
-      const li = document.createElement("li");
-      li.className = "node";
-      li.dataset.id = node.id;
-      li.setAttribute("role", "treeitem");
-      li.setAttribute("aria-expanded", openSet.has(node.id));
+  for (const node of nodes) {
+    const li = document.createElement("li");
+    li.className = "node";
+    li.dataset.id = node.id;
+    li.setAttribute("role", "treeitem");
+    li.setAttribute("aria-expanded", openSet.has(node.id));
 
-      const row = document.createElement("div");
-      row.className = "row";
+    const row = document.createElement("div");
+    row.className = "row";
 
-      const tog = document.createElement("button");
-      tog.className = "toggle" + (isLeaf(node) ? " leaf" : "");
-      tog.type = "button";
-      tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
-      tog.textContent = openSet.has(node.id) ? "▾" : "▸";
-      tog.addEventListener("click", () => toggleNode(node.id, li, tab));
-      row.appendChild(tog);
+    const tog = document.createElement("button");
+    tog.className = "toggle" + (isLeaf(node) ? " leaf" : "");
+    tog.type = "button";
+    tog.setAttribute("aria-label", isLeaf(node) ? "leaf" : "toggle");
+    tog.textContent = openSet.has(node.id) ? "▾" : "▸";
+    tog.addEventListener("click", () => toggleNode(node.id, li, tab));
+    row.appendChild(tog);
 
-      const label = document.createElement(node.url ? "a" : "span");
-      if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
-      label.className = "label";
-      label.textContent = node.title || node.id;
-      row.appendChild(label);
+    const label = document.createElement(node.url ? "a" : "span");
+    if (node.url) { label.href = node.url; label.target = "_blank"; label.rel = "noopener noreferrer"; }
+    label.className = "label";
+    label.textContent = node.title || node.id;
+    row.appendChild(label);
 
-      if (!isLeaf(node)) {
-        const b = document.createElement("span");
-        b.className = "badge";
-        b.textContent = leafCount(node);
-        b.setAttribute("aria-label", "Total dashboards in this branch");
-        row.appendChild(b);
-      }
-
-      li.appendChild(row);
-      parentEl.appendChild(li);
-
-      if (!isLeaf(node)) {
-        const children = document.createElement("ul");
-        const isOpen = openSet.has(node.id);
-        children.className = "children" + (isOpen ? " open" : " hidden");
-        children.setAttribute("role", "group");
-        li.appendChild(children);
-        totalLeaves += render(node.children, children, tab);
-      } else {
-        totalLeaves += 1;
-      }
-    }
-    return totalLeaves;
-  }
-
-  function toggleNode(id, liEl, tab){
-    const children = liEl.querySelector(":scope > .children");
-    if (!children) return;
-    const openSet = loadOpen(tab);
-    const isOpen = openSet.has(id);
-    const btn = liEl.querySelector(":scope > .row .toggle");
-    if (isOpen) openSet.delete(id); else openSet.add(id);
-    saveOpen(tab);
-    btn.textContent = isOpen ? "▸" : "▾";
-    liEl.setAttribute("aria-expanded", !isOpen);
-    if (isOpen){ children.classList.remove("open"); children.classList.add("hidden"); }
-    else { children.classList.remove("hidden"); void children.offsetWidth; children.classList.add("open"); }
-  }
-
-  function filterActiveTree(query){
-    const treeEl = treeEls[activeTab];
-    const data = dataByTab[activeTab];
-    const openSet = loadOpen(activeTab);
-
-    function fullReset(){
-      treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
-      treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
-      treeEl.querySelectorAll(".node").forEach(n => {
-        const id = n.dataset.id;
-        const children = n.querySelector(":scope > .children");
-        const tog = n.querySelector(":scope > .row .toggle");
-        if (children && tog) {
-          const open = openSet.has(id);
-          children.classList.toggle("hidden", !open);
-          children.classList.toggle("open", open);
-          tog.textContent = open ? "▾" : "▸";
-          n.setAttribute("aria-expanded", open);
-        }
-      });
+    if (!isLeaf(node)) {
+      const b = document.createElement("span");
+      b.className = "badge";
+      b.textContent = leafCount(node);
+      b.setAttribute("aria-label", "Total dashboards in this branch");
+      row.appendChild(b);
     }
 
-    query = (query || "").trim().toLowerCase();
-    if (!query){ fullReset(); return; }
+    li.appendChild(row);
+    parentEl.appendChild(li);
 
+    if (!isLeaf(node)) {
+      const children = document.createElement("ul");
+      const isOpen = openSet.has(node.id);
+      children.className = "children" + (isOpen ? " open" : " hidden");
+      children.setAttribute("role", "group");
+      li.appendChild(children);
+      totalLeaves += render(node.children, children, tab);
+    } else {
+      totalLeaves += 1;
+    }
+  }
+  return totalLeaves;
+}
+
+function toggleNode(id, liEl, tab){
+  const children = liEl.querySelector(":scope > .children");
+  if (!children) return;
+  const openSet = loadOpen(tab);
+  const isOpen = openSet.has(id);
+  const btn = liEl.querySelector(":scope > .row .toggle");
+  if (isOpen) openSet.delete(id); else openSet.add(id);
+  saveOpen(tab);
+  btn.textContent = isOpen ? "▸" : "▾";
+  liEl.setAttribute("aria-expanded", !isOpen);
+  if (isOpen){ children.classList.remove("open"); children.classList.add("hidden"); }
+  else { children.classList.remove("hidden"); void children.offsetWidth; children.classList.add("open"); }
+}
+
+function filterActiveTree(query){
+  const treeEl = treeEls[activeTab];
+  const data = dataByTab[activeTab];
+  const openSet = loadOpen(activeTab);
+
+  function fullReset(){
     treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
-    const all = flatten(data);
-    const hits = new Set(all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id));
-
-    function markVisibility(node){
-      const selfHit = hits.has(node.id);
-      let childVisible = false;
-      (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
-      const visible = selfHit || childVisible;
-
-      const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
-      if (el){
-        el.classList.toggle("hidden", !visible);
-        const row = el.querySelector(":scope > .row");
-        if (visible && row) row.classList.add("hit");
-        const children = el.querySelector(":scope > .children");
-        const tog = el.querySelector(":scope > .row .toggle");
-        if (children && tog){
-          children.classList.toggle("hidden", !childVisible);
-          children.classList.toggle("open", childVisible);
-          tog.textContent = childVisible ? "▾" : "▸";
-          el.setAttribute("aria-expanded", childVisible);
-        }
+    treeEl.querySelectorAll(".node").forEach(n => n.classList.remove("hidden"));
+    treeEl.querySelectorAll(".node").forEach(n => {
+      const id = n.dataset.id;
+      const children = n.querySelector(":scope > .children");
+      const tog = n.querySelector(":scope > .row .toggle");
+      if (children && tog) {
+        const open = openSet.has(id);
+        children.classList.toggle("hidden", !open);
+        children.classList.toggle("open", open);
+        tog.textContent = open ? "▾" : "▸";
+        n.setAttribute("aria-expanded", open);
       }
-      return visible;
+    });
+  }
+
+  query = (query || "").trim().toLowerCase();
+  if (!query){ fullReset(); return; }
+
+  treeEl.querySelectorAll(".row").forEach(r => r.classList.remove("hit"));
+  const all = flatten(data);
+  const hits = new Set(all.filter(n => (n.title || n.id).toLowerCase().includes(query)).map(n => n.id));
+
+  function markVisibility(node){
+    const selfHit = hits.has(node.id);
+    let childVisible = false;
+    (node.children||[]).forEach(ch => { if (markVisibility(ch)) childVisible = true; });
+    const visible = selfHit || childVisible;
+
+    const el = treeEl.querySelector(`.node[data-id="${CSS.escape(node.id)}"]`);
+    if (el){
+      el.classList.toggle("hidden", !visible);
+      const row = el.querySelector(":scope > .row");
+      if (visible && row) row.classList.add("hit");
+      const children = el.querySelector(":scope > .children");
+      const tog = el.querySelector(":scope > .row .toggle");
+      if (children && tog){
+        children.classList.toggle("hidden", !childVisible);
+        children.classList.toggle("open", childVisible);
+        tog.textContent = childVisible ? "▾" : "▸";
+        el.setAttribute("aria-expanded", childVisible);
+      }
     }
-    data.forEach(root => markVisibility(root));
+    return visible;
   }
+  data.forEach(root => markVisibility(root));
+}
 
-  function renderActive(){
-    const treeEl = treeEls[activeTab];
-    const data = dataByTab[activeTab];
-    const leaves = render(data, treeEl, activeTab);
-    document.getElementById("count").textContent = `${activeTab} dashboards: ${leaves}`;
-  }
+function renderActive(){
+  const treeEl = treeEls[activeTab];
+  const data = dataByTab[activeTab];
+  const leaves = render(data, treeEl, activeTab);
+  document.getElementById("count").textContent = `${activeTab} dashboards: ${leaves}`;
+}
 
-  function switchTab(toId){
-    if (toId === activeTab) return;
-    // update tabs/panels aria + classes
-    tabs.forEach(t => t.setAttribute("aria-selected", String(t.id === "tab-" + toId)));
-    panels.forEach(p => p.classList.toggle("active", p.id === "panel-" + toId));
-    activeTab = toId;
-    renderActive();
-    filterActiveTree(qEl.value);
-    // reflect in URL (non-destructive)
-    const url = new URL(location.href);
-    url.searchParams.set("tab", activeTab);
-    history.replaceState({}, "", url);
-  }
-
-  // Init: render all once for faster tab switching
-  Object.keys(treeEls).forEach(tabId => {
-    render(dataByTab[tabId], treeEls[tabId], tabId);
-  });
+function switchTab(toId){
+  if (toId === activeTab) return;
+  // update tabs/panels aria + classes
+  tabs.forEach(t => t.setAttribute("aria-selected", String(t.id === "tab-" + toId)));
+  panels.forEach(p => p.classList.toggle("active", p.id === "panel-" + toId));
+  activeTab = toId;
   renderActive();
+  filterActiveTree(qEl.value);
+  // reflect in URL (non-destructive)
+  const url = new URL(location.href);
+  url.searchParams.set("tab", activeTab);
+  history.replaceState({}, "", url);
+}
 
-  // Controls apply to active tab
-  document.getElementById("expand").addEventListener("click", () => {
-    const all = flatten(dataByTab[activeTab]);
-    openSets[activeTab] = new Set(all.filter(n => !isLeaf(n)).map(n => n.id));
-    saveOpen(activeTab);
-    filterActiveTree(qEl.value); // will open everything respecting filter
-  });
+// Init: render all once for faster tab switching
+Object.keys(treeEls).forEach(tabId => {
+  render(dataByTab[tabId], treeEls[tabId], tabId);
+});
+renderActive();
 
-  document.getElementById("collapse").addEventListener("click", () => {
-    openSets[activeTab] = new Set();
-    saveOpen(activeTab);
-    filterActiveTree(qEl.value); // will close everything
-  });
+// Controls apply to active tab
+document.getElementById("expand").addEventListener("click", () => {
+  const all = flatten(dataByTab[activeTab]);
+  openSets[activeTab] = new Set(all.filter(n => !isLeaf(n)).map(n => n.id));
+  saveOpen(activeTab);
+  filterActiveTree(qEl.value); // will open everything respecting filter
+});
 
-  qEl.addEventListener("input", () => filterActiveTree(qEl.value));
+document.getElementById("collapse").addEventListener("click", () => {
+  openSets[activeTab] = new Set();
+  saveOpen(activeTab);
+  filterActiveTree(qEl.value); // will close everything
+});
 
-  // Tab click
-  tabs.forEach(btn => {
-    btn.addEventListener("click", () => switchTab(btn.id.replace("tab-","")));
-  });
+qEl.addEventListener("input", () => filterActiveTree(qEl.value));
 
-  // Deep links: ?tab=AE&q=foo
-  const params = new URLSearchParams(location.search);
-  const initialTab = params.get("tab");
-  if (initialTab && treeEls[initialTab]) {
-    // flip ARIA/UI then render/filter
-    tabs.forEach(t => t.setAttribute("aria-selected", "false"));
-    document.getElementById("tab-" + initialTab)?.setAttribute("aria-selected","true");
-    panels.forEach(p => p.classList.remove("active"));
-    document.getElementById("panel-" + initialTab)?.classList.add("active");
-    activeTab = initialTab;
-  }
-  if (params.get("q")) qEl.value = params.get("q");
-  renderActive();
-  filterActiveTree(qEl.value || "");
-  </script>
+// Tab click
+tabs.forEach(btn => {
+  btn.addEventListener("click", () => switchTab(btn.id.replace("tab-","")));
+});
+
+// Deep links: ?tab=SDR&q=foo
+const params = new URLSearchParams(location.search);
+const initialTab = params.get("tab");
+if (initialTab && treeEls[initialTab]) {
+  // flip ARIA/UI then render/filter
+  tabs.forEach(t => t.setAttribute("aria-selected", "false"));
+  document.getElementById("tab-" + initialTab)?.setAttribute("aria-selected","true");
+  panels.forEach(p => p.classList.remove("active"));
+  document.getElementById("panel-" + initialTab)?.classList.add("active");
+  activeTab = initialTab;
+}
+if (params.get("q")) qEl.value = params.get("q");
+renderActive();
+filterActiveTree(qEl.value || "");
+</script>
 </body>
 </html>
